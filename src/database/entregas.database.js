@@ -4,11 +4,32 @@ export class Database {
     this.nextId = 1;
   }
 
-  getEntregas() {
+    getEntregas() {
     return this.entregas;
-  }
+    }
 
-  generateId() {
-    return this.nextId++;
-  }
+    generateId() {
+        return this.nextId++;
+    }
+
+    listarTodos() {
+        return this.entregas;
+        }
+
+    buscarPorId(id) {
+        return this.entregas.find((e) => e.id === id);
+        }
+
+    criar(dados) {
+        const novaEntrega = {id: this.generateId++, ...dados};
+        this.entregas.push(novaEntrega);
+        return novaEntrega;
+        }
+
+    atualizar(id, dados) {
+        const indice = this.entregas.findIndex((e) => e.id === id);
+        if (indice === -1) return false;
+        this.entregas[indice] = {...this.entregas[indice], ...dados};
+        return this.entregas[indice];
+        }
 }
