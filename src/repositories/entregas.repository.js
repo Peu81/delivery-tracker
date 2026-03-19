@@ -1,4 +1,4 @@
-export class EntregasRepository {
+export class entregasRepository {
     constructor(database) {
         this.database = database;
     }

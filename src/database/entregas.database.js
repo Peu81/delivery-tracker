@@ -1,4 +1,4 @@
-export class Database {
+export class entregasDatabase {
   constructor() {
     this.entregas = [];
     this.nextId = 1;
