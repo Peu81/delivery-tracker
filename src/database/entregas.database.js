@@ -1,7 +1,7 @@
 export class entregasDatabase {
   constructor() {
     this.entregas = [];
-    this.nextId = 1;
+    this.nextId = 3;
   }
 
     getEntregas() {
@@ -17,17 +17,17 @@ export class entregasDatabase {
         }
 
     buscarPorId(id) {
-        return this.entregas.find((e) => e.id === id);
+        return this.entregas.find((e) => e.id === Number(id));
         }
 
     criar(dados) {
-        const novaEntrega = {id: this.generateId++, ...dados};
+        const novaEntrega = {id: this.generateId(), ...dados};
         this.entregas.push(novaEntrega);
         return novaEntrega;
         }
 
     atualizar(id, dados) {
-        const indice = this.entregas.findIndex((e) => e.id === id);
+        const indice = this.entregas.findIndex((e) => e.id === Number(id));
         if (indice === -1) return false;
         this.entregas[indice] = {...this.entregas[indice], ...dados};
         return this.entregas[indice];

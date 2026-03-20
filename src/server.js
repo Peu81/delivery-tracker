@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/', entregasRouter);
+app.use('/api/entregas', entregasRouter);
 
 const porta = 3000;
 app.listen(porta);

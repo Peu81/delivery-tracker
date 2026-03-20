@@ -7,8 +7,8 @@ export class entregasService {
         return this.repository.listarTodos();
     }
 
-    async buscarPorId() {
-        return this.repository.buscarPorId();
+    async buscarPorId(id) {
+        return this.repository.buscarPorId(id);
     }
 
     async criar(dados) {

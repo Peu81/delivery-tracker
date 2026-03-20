@@ -8,7 +8,7 @@ export class entregasRepository {
     }
 
     async buscarPorId(id) {
-        return this.database.buscarPorId(id);
+        return this.database.buscarPorId(Number(id));
     }
 
     async criar(dados) {
@@ -16,7 +16,7 @@ export class entregasRepository {
         };
 
     async atualizar(id, dados) {
-        return this.database.atualizar(id, dados);
+        return this.database.atualizar(Number(id), dados);
     }
 
 }
