@@ -2,6 +2,7 @@ export class entregasDatabase {
   constructor() {
     this.entregas = [];
     this.nextId = 1;
+
   }
 
     getEntregas() {
@@ -15,6 +16,10 @@ export class entregasDatabase {
     listarTodos() {
         return this.entregas;
         }
+
+    listarPorStatus(status) {
+        return this.entregas.filter((e) => e.status === status);
+    }
 
     buscarPorId(id) {
         return this.entregas.find((e) => e.id === Number(id));

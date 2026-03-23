@@ -14,5 +14,12 @@ app.use(morgan(":method :url :status Body: :body "));
 
 app.use('/api/entregas', entregasRouter);
 
+app.use((err, req, res, next) => {
+    res.status(400).json({
+        erro: true,
+        mensagem: err.message
+    });
+});
+
 const porta = 3000;
 app.listen(porta);

@@ -8,10 +8,25 @@ export class entregasController {
         this.atualizar = this.atualizar.bind(this);
     }
 
+
+    
     async listarTodos(req, res, next) {
         try {
-            const entregas = await this.service.listarTodos(req.params); 
+            const { status } = req.query;
+            const entregas = await this.service.listarTodos(status); 
             res.json(entregas);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async listarPorStatus(req, res, next) {
+        try {
+            
+            const statusEntrega = await this.service.listarTodos(req.query);
+
+            res.json(statusEntrega);
         } catch (error) {
             next(error);
         }
@@ -42,10 +57,22 @@ export class entregasController {
 
     async atualizar(req, res, next) {
         try {
-            const entregaAtualizada = await this.service.atualizar(Number(req.params.id));
+            const entregaAtualizada = await this.service.atualizar(Number(req.params.id),
+            req.body)
+           
             res.json(entregaAtualizada);
         } catch (error) {
             next(error);
         }
+    }
+
+    async cancelar(req, res, next) {
+        try {
+            const entrega = await this.service.atualizar(req.params.id, {status: "CANCELADA"});
+            res.json(entrega);
+        } catch (error) {
+            next(error);
+        }
+
     }
 }
