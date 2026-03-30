@@ -50,7 +50,9 @@ export class entregasDatabase {
     }
 
     criar(dados) {
-        const novaEntrega = {id: this.gerarIdEntrega(), ...dados};
+        const novaEntrega = {id: this.gerarIdEntrega(), 
+            status: "CRIADA",
+            ...dados};
         this.entregas.push(novaEntrega);
         return novaEntrega;
         }

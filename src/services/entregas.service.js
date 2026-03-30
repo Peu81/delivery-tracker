@@ -33,10 +33,6 @@ export class entregasService {
             throw new AppError("Origem e destino não podem ser iguais.", 400);
         }
 
-        if (dados.status !== "CRIADA") {
-            throw AppError("O status inicial não pode ser diferente de 'CRIADA'", 400);      
-        }
-
         const entregaDuplicada = await this.repository.entregasDuplicadas(
             dados.descricao, 
             dados.origem, 
