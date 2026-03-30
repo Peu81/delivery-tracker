@@ -1,0 +1,78 @@
+{
+  "info": {
+    "_postman_id": "2689382b-9a23-46fd-85fc-52b5b190ed65",
+    "name": "MOTORISTAS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53398463",
+    "_collection_link": "https://go.postman.co/collection/53398463-2689382b-9a23-46fd-85fc-52b5b190ed65?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "criar motorista",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "motorista duplicado",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "atribuir motorista",
+      "request": {
+        "method": "PATCH",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "atribuir em_transito",
+      "request": {
+        "method": "PATCH",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "atribuir inativo",
+      "request": {
+        "method": "PATCH",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "entregas do motorista",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "filtragem combinada (id motorista + status)",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "inativar motorista",
+      "request": {
+        "method": "PATCH",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
