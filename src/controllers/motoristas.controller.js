@@ -29,4 +29,14 @@ export class motoristasController {
             next(error);
         }
     }
+
+    async inativaMotorista(req, res, next) {
+        try {
+            const motorista = await this.service.inativaMotorista(Number(req.params.id));
+            res.status(200).json(motorista);
+        } catch (error) {
+            next(error);
+        }
+    }
+    
 }

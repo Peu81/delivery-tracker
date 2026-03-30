@@ -32,6 +32,9 @@ motoristasRouter.post('/', (req, res, next) => motoristaController.cadastrarMoto
 motoristasRouter.get('/', (req, res, next) => motoristaController.listarMotoristas(req, res, next));
 motoristasRouter.get('/:id', (req, res, next) => motoristaController.motoristaPorId(req, res, next));
 motoristasRouter.get('/:id/entregas', (req, res, next) => entregaController.listaEntregaPorMotorista(req, res, next));
+motoristasRouter.patch('/:id/inativar', (req, res, next) => motoristaController.inativaMotorista(req, res, next))
+
+
 
 export {entregasRouter};
 export {motoristasRouter};

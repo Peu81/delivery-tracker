@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import { entregasRouter, motoristasRouter } from './routes/entregas.routes.js';
+import { middlewareDeErros } from './middlewares/erros.middlewares.js';
 
 
 const app = express();
@@ -14,12 +15,7 @@ app.use(morgan(":method :url :status Body: :body "));
 
 app.use('/api/entregas', entregasRouter);
 app.use('/api/motoristas', motoristasRouter);
-
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        erro: err.message
-    });
-});
+app.use(middlewareDeErros)
 
 const porta = 3000;
 app.listen(porta);

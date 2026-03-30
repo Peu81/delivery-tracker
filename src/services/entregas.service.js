@@ -1,3 +1,5 @@
+import { AppError } from "../utils/AppError.js";
+
 const fluxoEntrega = {
     "CRIADA": "EM_TRANSITO",
     "EM_TRANSITO": "ENTREGUE"
@@ -12,13 +14,13 @@ export class entregasService {
 
     async listarTodos(status) {
         if (status) {
-            return this.repository.listarPorStatus(status)
+            return this.repository.listarPorStatus(status);
         }
         return this.repository.listarTodos();
     }
     
     async buscarPorId(id) {
-        return this._entregaOuErro(id)
+        return this._entregaOuErro(id);
     }
 
     async historicoPorId(id) {
@@ -28,15 +30,11 @@ export class entregasService {
 
     async criar(dados) {
         if (dados.origem.trim() === dados.destino.trim()) {
-            const error = new Error("Origem e destino não podem ser iguais.");
-            error.status = 400;
-            throw error;
+            throw new AppError("Origem e destino não podem ser iguais.", 400);
         }
 
         if (dados.status !== "CRIADA") {
-            const error = new Error("O status inicial não pode ser diferente de 'CRIADA'");
-            error.status = 400;
-            throw error;       
+            throw AppError("O status inicial não pode ser diferente de 'CRIADA'", 400);      
         }
 
         const entregaDuplicada = await this.repository.entregasDuplicadas(
@@ -45,9 +43,7 @@ export class entregasService {
             dados.destino);
 
         if (entregaDuplicada) {
-            const error = new Error("Entrega duplicada! Já existe uma entrega com essas informações");
-            error.status = 409;
-            throw error;  
+            throw new AppError("Entrega duplicada! Já existe uma entrega com essas informações", 409);
         }
 
         const historicoInicial = {
@@ -68,9 +64,7 @@ export class entregasService {
         const proximoStatus = fluxoEntrega[entrega.status];
 
         if (!proximoStatus) {
-            const error = new Error(`Não é possível avançar. Status atual: '${entrega.status}'`);
-            error.status = 409;
-            throw error;        
+            throw new AppError(`Não é possível avançar. Status atual: '${entrega.status}'`, 409);   
         }
          
         return this.atualizar(Number(id), {"status": proximoStatus});
@@ -84,29 +78,21 @@ export class entregasService {
         const entregaExiste = await this._entregaOuErro(id);
  
         if (entregaExiste.status === "ENTREGUE" || entregaExiste.status === "CANCELADA") {
-            const error = new Error("O status não pode ser alterado.");
-            error.status = 409;
-            throw error;
+            throw new AppError("O status não pode ser alterado.", 409);
         }
 
         if (dados.status === "CANCELADA"){
             if (entregaExiste.status !== "CRIADA" && entregaExiste.status !== "EM_TRANSITO") {
-            const error = new Error("Só é possivel cancelar entregas 'CRIADAS' ou 'EM_TRANSITO'!");
-            error.status = 422;
-            throw error;
+            throw new AppError("Só é possivel cancelar entregas 'CRIADAS' ou 'EM_TRANSITO'!", 400);
         }}
         
         if (dados.status === "ENTREGUE") {
             if (entregaExiste.status === "CRIADA"){ 
-            const error = new Error("Uma entrega recem criada não pode receber o status 'ENTREGUE' sem estar 'EM_TRANSITO'.");
-            error.status = 422;
-            throw error;
+            throw new AppError("Uma entrega recem criada não pode receber o status 'ENTREGUE' sem estar 'EM_TRANSITO'.", 422);
             }; 
 
             if (entregaExiste.status !== "EM_TRANSITO") {
-            const error = new Error("Entregas precisam estar 'EM_TRANSITO' para serem entregues!");
-            error.status = 422;
-            throw error;            
+            throw new AppError("Entregas precisam estar 'EM_TRANSITO' para serem entregues!", 422);         
             }      
         }
         
@@ -129,23 +115,17 @@ export class entregasService {
         const entregaExiste = await this._entregaOuErro(entregaId)
 
         if (entregaExiste.status !== "CRIADA") {
-            const error = new Error("Só é possivel atribuir entregas com status 'CRIADA'.");
-            error.status = 409;
-            throw error;         
+            throw new AppError("Só é possivel atribuir entregas com status 'CRIADA'.", 409);         
         }
 
         const motorista = await this.motoristasRepository.buscarPorId(motoristaId);
 
         if (!motorista) {
-            const error = new Error("Motorista inexistente.");
-            error.status = 404;
-            throw error;
+            throw new AppError("Motorista inexistente.", 404);
         }
 
         if (motorista.status !== "ATIVO") {
-            const error = new Error("Não é possível atribuir entregas para motoristas inativos.");
-            error.status = 422;
-            throw error;   
+            throw new AppError("Não é possível atribuir entregas para motoristas inativos.", 422); 
         }
 
         let mensagem = ""; 
@@ -179,19 +159,15 @@ export class entregasService {
         const numId = Number(id);
 
         if (isNaN(numId)) {
-            const erroIdInvalido = new Error("ID inválido");
-            erroIdInvalido.status = 400;
-            throw erroIdInvalido;
+            throw new AppError("ID inválido", 400);
         }
 
         const entrega = await this.repository.buscarPorId(numId);
 
         if (!entrega) {
-            const erroEntregaInexistente = new Error("Entrega inexistente!");
-            erroEntregaInexistente.status = 404;
-            throw erroEntregaInexistente;
+            throw new AppError("Entrega inexistente!", 404);
         }
-        
+    
         return entrega;
     }
 }

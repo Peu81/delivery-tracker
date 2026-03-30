@@ -18,4 +18,8 @@ export class motoristasRepository {
     async buscarPorId(id) {
         return this.database.motoristaPorId(Number(id));
     }
+
+    async atualizar(id, dados) {
+        return this.database.atualizarMotorista(Number(id), dados);
+    }
 }

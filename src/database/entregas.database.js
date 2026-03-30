@@ -67,5 +67,12 @@ export class entregasDatabase {
         this.motoristas.push(novoMotorista);
         return novoMotorista;
     }
+
+    atualizarMotorista(id, dados) {
+        const indice = this.motoristas.findIndex((e) => e.id === Number(id));
+        if (indice === -1) return false;
+        this.motoristas[indice] = {...this.motoristas[indice], ...dados};
+        return this.motoristas[indice];
+        }
 }
 

@@ -73,7 +73,10 @@ export class entregasController {
     async cancelar(req, res, next) {
         try {
             const entrega = await this.service.cancelar(req.params.id);
-            res.status(204).json(entrega);
+            res.status(204).json({
+                mensagem: "Entrega cancelada"
+            });
+
         } catch (error) {
             next(error);
         }
@@ -83,7 +86,10 @@ export class entregasController {
     async avancaStatus(req, res, next) {
         try {
             const entrega = await this.service.avancaStatus(req.params.id);
-            res.status(200).json(entrega);
+            res.status(200).json({
+                mensagem: "Status da entrega atualizado!"
+            });
+            
         } catch (error) {
             next(error)
         }
