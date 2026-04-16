@@ -1,9 +1,13 @@
+/**
+@implements {IMotoristasRepository}
+*/
+
 export class motoristasRepository {
     constructor(database) {
         this.database = database;
     }
 
-    async cadastrarMotorista(dadosMotorista) {
+    async criar(dadosMotorista) {
         return this.database.cadastrarMotorista(dadosMotorista);
     }
 
@@ -11,7 +15,7 @@ export class motoristasRepository {
         return this.database.buscarPorCpf(cpf);
     }
     
-    async listarMotoristas() {
+    async listarTodos(filtros) {
         return this.database.listarMotoristas();
     }
 

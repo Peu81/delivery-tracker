@@ -5,7 +5,7 @@ export class motoristasService {
         this.repository = repository;
     }
 
-    async cadastrarMotorista(dadosMotorista) {
+    async criar(dadosMotorista) {
         const cpf = String(dadosMotorista.cpf);
 
         const motorista = await this.repository.buscarPorCpf(cpf);

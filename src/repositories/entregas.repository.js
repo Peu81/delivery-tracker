@@ -1,3 +1,7 @@
+/**
+@implements {IEntregasRepository}
+*/
+
 export class entregasRepository {
     constructor(database) {
         this.database = database;
