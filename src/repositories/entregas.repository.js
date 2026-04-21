@@ -2,7 +2,7 @@
 @implements {IEntregasRepository}
 */
 
-import { pool } from "../config/db.init";
+import { pool } from "../config/db.init.js";
 
 export class entregasRepository {
     constructor(database) {

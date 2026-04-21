@@ -14,7 +14,7 @@ export class motoristasRepository {
         try {
             const {rows} = await pool.query(`INSERT INTO motoristas 
                 (nome, cpf, placaVeiculo, status) VALUES ($1, $2, $3, $4)
-                RETURNING id, nome, placaVeiculo, cpf, status`, 
+                RETURNING *`, 
                 [dados.nome, dados.cpf, dados.placaVeiculo, 'ATIVO']);
             
                 return rows[0];   
@@ -22,6 +22,8 @@ export class motoristasRepository {
             if (error?.code === '23505') {
                 throw new AppError('CPF já cadastrado.', 409);
             }
+            console.error("ERRO DO BANCO:", error); 
+            throw error;             
         }
     }
 
