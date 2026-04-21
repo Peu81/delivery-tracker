@@ -22,13 +22,13 @@ export class entregasRepository {
         let contador = 1;
 
         if (filtros.status) {
-            condicoes.push(`status == $${contador}`);
+            condicoes.push(`status = $${contador}`);
             valores.push(filtros.status);
             contador++;
         }
 
         if (filtros.motoristaId) {
-            condicoes.push(`fk_id_motorista == $${contador}`);
+            condicoes.push(`fk_id_motorista = $${contador}`);
             valores.push(filtros.motoristaId);
             contador++;
         }
@@ -41,7 +41,7 @@ export class entregasRepository {
 
         const {rows} = await pool.query(query, valores);
 
-        return rows ?? null;
+        return rows;
     }
 
     async listarPorStatus(status) {

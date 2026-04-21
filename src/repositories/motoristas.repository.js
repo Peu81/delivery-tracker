@@ -36,15 +36,36 @@ export class motoristasRepository {
         return rows[0] ?? null;
             }
     
-    async listarTodos() {
-        const {rows} = await pool.query(`SELECT id, 
-                nome, 
-                cpf, 
-                placaVeiculo, 
-                status FROM motoristas 
-                ORDER BY id`);
+    async listarTodos(filtros = {}) {
+        let query = `SELECT id, 
+            nome, 
+            cpf, 
+            placaVeiculo, 
+            status FROM motoristas`;
+        const valores = [];
+        const condicoes = [];
+        let contador = 1;
 
-        return rows;
+        if (filtros.status) {
+            condicoes.push(`status = $${contador}`);
+            valores.push(filtros.status);
+            contador++;
+        }
+
+        if (filtros.id) {
+            condicoes.push(`id = $${contador}`);
+            valores.push(filtros.id);
+            contador++;
+        }
+
+        if (condicoes.length > 0) {
+            query += `\nWHERE ` + condicoes.join(` AND `);
+        }
+
+        query += `\nORDER BY id`;
+
+        const {rows} = await pool.query(query, valores)
+        return rows;            
     }
 
     async buscarPorId(id) {
