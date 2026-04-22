@@ -28,9 +28,9 @@ entregasRouter.post('/', (req, res, next) => entregaController.criar(req, res, n
 entregasRouter.patch('/:id/avancar', (req, res, next) => entregaController.avancaStatus(req, res, next));
 entregasRouter.patch('/:id/cancelar', (req, res, next) => entregaController.cancelar(req, res, next));
 entregasRouter.patch('/:id/atribuir', (req, res, next) => entregaController.atribuiMotorista(req, res, next));
-motoristasRouter.post('/', (req, res, next) => motoristaController.cadastrarMotorista(req, res, next));
-motoristasRouter.get('/', (req, res, next) => motoristaController.listarMotoristas(req, res, next));
-motoristasRouter.get('/:id', (req, res, next) => motoristaController.motoristaPorId(req, res, next));
+motoristasRouter.post('/', (req, res, next) => motoristaController.criar(req, res, next));
+motoristasRouter.get('/', (req, res, next) => motoristaController.listarTodos(req, res, next));
+motoristasRouter.get('/:id', (req, res, next) => motoristaController.buscarPorId(req, res, next));
 motoristasRouter.get('/:id/entregas', (req, res, next) => entregaController.listaEntregaPorMotorista(req, res, next));
 motoristasRouter.patch('/:id/inativar', (req, res, next) => motoristaController.inativaMotorista(req, res, next))
 

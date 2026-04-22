@@ -19,15 +19,15 @@ export class motoristasService {
             status: "ATIVO"
         }
 
-        return this.repository.cadastrarMotorista(informacoesMotorista);
+        return this.repository.criar(informacoesMotorista);
     }
 
-    async listarMotoristas() {
-        return this.repository.listarMotoristas()
+    async listarTodos(filtros) {
+        return this.repository.listarTodos()
     }
 
-    async motoristaPorId(id) {
-        const motorista = await this.repository.motoristaPorId(Number(id));
+    async buscarPorId(id) {
+        const motorista = await this.repository.buscarPorId(Number(id));
 
         if (!motorista) {
             throw new AppError("Motorista não encontrado.", 404);
