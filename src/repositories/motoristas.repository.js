@@ -3,17 +3,21 @@
 */
 
 export class motoristasRepository {
-    constructor(db) {
-        this.db = db;
+    constructor(prisma) {
+        this.prisma = prisma;
     }
 
     async criar(dados) {
         try {
-            const result = await this.db.run(`INSERT INTO motoristas 
-                (nome, cpf, placaVeiculo, status) VALUES (?, ?, ?, ?)`, 
-                [dados.nome, dados.cpf, dados.placaVeiculo, 'ATIVO']);
-            
-            return {id: result.lastID, ...dados, status: 'ATIVO'};   
+            return await this.prisma.motorista.create({
+                data: {
+                    nome: dados.nome,
+                    cpf: dados.cpf,
+                    placaVeiculo: dados.placaVeiculo,
+                    status: dados.status
+                }
+            });
+
         } catch (error) {
             if (error.message.includes('UNIQUE constraint failed')) {
                 throw new AppError('CPF já cadastrado.', 409);
@@ -24,12 +28,9 @@ export class motoristasRepository {
     }
 
     async buscarPorCpf(cpf) {
-        return await this.db.get(`SELECT id, 
-            nome, 
-            cpf, 
-            placaVeiculo, 
-            status 
-            FROM motoristas WHERE cpf = ?`, [cpf]);
+        return await this.prisma.motorista.findUnique({
+            where: {cpf: cpf}
+        })
     }
     
     async listarTodos(filtros = {}) {
@@ -62,15 +63,21 @@ export class motoristasRepository {
     }
 
     async buscarPorId(id) {
-        return await this.db.get('SELECT * FROM motoristas WHERE id = ?', [id]);
+        return await this.prisma.motorista.findUnique({
+            where: {id: Number(id)}
+        });
     }
 
     async atualizar(id, dados) {
         const {nome, placaVeiculo, status} = dados;
-        await this.db.run(
-            `UPDATE motoristas SET nome = ?, placaVeiculo = ?, status = ?  
-            WHERE id = ?`, 
-            [nome, placaVeiculo, status, id]);
+        await this.prisma.entrega.update({
+            where: {id: Number(id)},
+            data: {
+                nome: dados.nome,
+                placaVeiculo: dados.placaVeiculo,
+                status: dados.status
+            }
+        });
 
         return await this.buscarPorId(id)
     }

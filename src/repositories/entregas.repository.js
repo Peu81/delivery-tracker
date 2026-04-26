@@ -2,9 +2,12 @@
 @implements {IEntregasRepository}
 */
 
+import { info } from "node:console";
+import { describe } from "node:test";
+
 export class entregasRepository {
-    constructor(db) {
-        this.db = db;
+    constructor(prisma) {
+        this.prisma = prisma;
     }
 
     async listarTodos(filtros = {}) {
@@ -12,34 +15,43 @@ export class entregasRepository {
     }
 
     async listarPorStatus(status) {
-        return await this.db.all(`SELECT * FROM entregas WHERE status = ?`, [status])
+        return await this.prisma.entrega.findMany({
+            where: {status}
+        });
     }
 
     async buscarPorId(id) {
-        return await this.db.get(`SELECT * FROM entregas WHERE id = ?`, [id]);
+        return await this.prisma.entrega.findUnique({
+            where: {id: Number(id)},
+            include: {eventos: true}
+        });
     }
 
     async historicoPorId(idEntrega) {
-        return await this.db.all(
-            `SELECT id, informacoes, data, fk_id_entrega
-            FROM eventos_entrega
-            WHERE fk_id_entrega = ?
-            ORDER BY data DESC`, [idEntrega]);
+        return await this.prisma.entrega.findUnique({
+            where: {fk_id_entrega: Number(idEntrega)},
+            orderBy: {createdAt: 'desc'}
+        });
     }
 
     async criar(dados) {
-        const result = await this.db.run(`INSERT INTO entregas
-            (descricao, origem, destino, status, fk_id_motorista) VALUES (?, ?, ?, ?, ?)
-            RETURNING id, descricao, origem, destino, status`,
-            [dados.descricao, dados.origem, dados.destino, 'CRIADA', dados.fk_id_motorista]);
-
-        const idNovaEntrega = result.lastID;
-
         let infoEvento = "Entrega 'CRIADA'.";
 
         if (dados.historico && dados.historico.length > 0) {
             infoEvento = dados.historico[0].descricao;
         }
+
+        const result = await this.prisma.entrega.create({
+            data: {
+                descricao: dados.descricao,
+                origem: dados.origem,
+                destino: dados.destino,
+                status: dados.status,
+                fk_id_motorista: Number(dados.fk_id_motorista),
+                eventos: {create: [{infoEvento}]}
+            }});
+
+        const idNovaEntrega = result.lastID;
 
         await this.db.run(`INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)
             `, [infoEvento, idNovaEntrega]);
@@ -48,26 +60,31 @@ export class entregasRepository {
     }
 
     async entregasDuplicadas(descricao, origem, destino) {
-        return await this.db.get(`
-            SELECT * FROM entregas
-            WHERE descricao = ? AND origem = ? AND destino = ?`,
-            [descricao, origem, destino]);
+        return await this.prisma.findFirst(
+            {where: {descricao, origem, destino}}
+        );
     }
 
 async atualizar(id, dados) {
-        await this.db.run(
-            `UPDATE entregas
-            SET descricao = ?, origem = ?, destino = ?, status = ?, fk_id_motorista = ?
-            WHERE id = ?`,
-            [dados.descricao, dados.origem, dados.destino, dados.status, dados.fk_id_motorista, id]
-        );
-
         let infoEvento = `Status atualizado para: ${dados.status}`;
 
         if (dados.historico && dados.historico.length > 0) {
             const ultimoEvento = dados.historico[dados.historico.length - 1];
             infoEvento = ultimoEvento.descricao;
         }
+
+    await this.prisma.entrega.update( 
+        {where: {id: Number(id)},
+        data: {
+            descricao: dados.descricao,
+            origem: dados.origem,
+            destino: dados.destino,
+            status: dados.status,
+            fk_id_motorista: Number(dados.fk_id_motorista),
+            eventos: {create: [{informacoes: infoEvento}]}
+        }
+    }
+);
         
         await this.db.run(
             `INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)`,
@@ -78,14 +95,12 @@ async atualizar(id, dados) {
     }
     
     async listaPorMotorista(motoristaId, status) {
-        let query = `SELECT * FROM entregas WHERE fk_id_motorista = ?`;
-        const valores = [motoristaId];
-        
+        const where = {fk_id_motorista: Number(motoristaId)};
+
         if (status) {
-            query += `AND status = ?`;
-            valores.push(status);
+            where.status = status;
         }
 
-        return await this.db.all(query, valores);
+        return await this.prisma.entrega.findMany({where});
     }
 }
