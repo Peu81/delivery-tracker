@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "morgan": "^1.10.1",
@@ -25,5 +26,8 @@
     "url": "https://github.com/Peu81/pweb-atividade05/issues"
   },
   "homepage": "https://github.com/Peu81/pweb-atividade05#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "prisma": "^6.19.3"
+  }
 }
