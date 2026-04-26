@@ -100,7 +100,7 @@ export class entregasService {
         const dadosAtualizados = {
             ...entregaExiste,
             status: dados.status,
-            historico: [...entregaExiste.historico, novoHistorico]
+            historico: [...(entregaExiste.historico || []), novoHistorico]
         }
 
         return this.repository.atualizar(id, dadosAtualizados);

@@ -3,20 +3,19 @@
 */
 
 export class motoristasRepository {
-    constructor(database) {
-        this.database = database;
+    constructor(db) {
+        this.db = db;
     }
 
     async criar(dados) {
         try {
-            const {rows} = await pool.query(`INSERT INTO motoristas 
-                (nome, cpf, placaVeiculo, status) VALUES ($1, $2, $3, $4)
-                RETURNING *`, 
+            const result = await this.db.run(`INSERT INTO motoristas 
+                (nome, cpf, placaVeiculo, status) VALUES (?, ?, ?, ?)`, 
                 [dados.nome, dados.cpf, dados.placaVeiculo, 'ATIVO']);
             
-                return rows[0];   
+            return {id: result.lastID, ...dados, status: 'ATIVO'};   
         } catch (error) {
-            if (error?.code === '23505') {
+            if (error.message.includes('UNIQUE constraint failed')) {
                 throw new AppError('CPF já cadastrado.', 409);
             }
             console.error("ERRO DO BANCO:", error); 
@@ -25,14 +24,12 @@ export class motoristasRepository {
     }
 
     async buscarPorCpf(cpf) {
-        const {rows} = await pool.query(`SELECT id, 
+        return await this.db.get(`SELECT id, 
             nome, 
             cpf, 
             placaVeiculo, 
             status 
-            FROM motoristas WHERE cpf = $1`, [cpf]);
-    
-        return rows[0] ?? null;
+            FROM motoristas WHERE cpf = ?`, [cpf]);
     }
     
     async listarTodos(filtros = {}) {
@@ -44,18 +41,15 @@ export class motoristasRepository {
         
         const valores = [];
         const condicoes = [];
-        let contador = 1;
 
         if (filtros.status) {
-            condicoes.push(`status = $${contador}`);
+            condicoes.push(`status = ?`);
             valores.push(filtros.status);
-            contador++;
         }
 
         if (filtros.id) {
-            condicoes.push(`id = $${contador}`);
+            condicoes.push(`id = ?`);
             valores.push(filtros.id);
-            contador++;
         }
 
         if (condicoes.length > 0) {
@@ -64,23 +58,20 @@ export class motoristasRepository {
 
         query += `\nORDER BY id`;
 
-        const {rows} = await pool.query(query, valores)
-        return rows;
+        return await this.db.all(query, valores)
     }
 
     async buscarPorId(id) {
-        const {rows} = await pool.query('SELECT * FROM motoristas WHERE id = $1', [id]);
-        return rows[0] ?? null;
+        return await this.db.get('SELECT * FROM motoristas WHERE id = ?', [id]);
     }
 
     async atualizar(id, dados) {
         const {nome, placaVeiculo, status} = dados;
-        const {rows} = await pool.query(
-            `UPDATE motoristas SET nome = $1, placaVeiculo = $2, status = $3  
-            WHERE id = $4
-            RETURNING *` 
+        await this.db.run(
+            `UPDATE motoristas SET nome = ?, placaVeiculo = ?, status = ?  
+            WHERE id = ?`, 
             [nome, placaVeiculo, status, id]);
 
-        return rows ?? null;
+        return await this.buscarPorId(id)
     }
 }

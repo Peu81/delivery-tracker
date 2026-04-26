@@ -3,123 +3,89 @@
 */
 
 export class entregasRepository {
-    constructor(database) {
-        this.database = database;
+    constructor(db) {
+        this.db = db;
     }
 
     async listarTodos(filtros = {}) {
-        let query = `SELECT id, 
-            descricao,
-            origem,
-            destino,
-            status,
-            fk_id_motorista FROM entregas`
-            
-        const valores = [];
-        const condicoes = [];
-        let contador = 1;
-
-        if (filtros.status) {
-            condicoes.push(`status = $${contador}`);
-            valores.push(filtros.status);
-            contador++;
-        }
-
-        if (filtros.motoristaId) {
-            condicoes.push(`fk_id_motorista = $${contador}`);
-            valores.push(filtros.motoristaId);
-            contador++;
-        }
-
-        if (condicoes.length > 0) {
-            query += `\nWHERE ` + condicoes.join(` AND `);
-        }
-
-        query += `\nORDER BY id`;
-
-        const {rows} = await pool.query(query, valores);
-
-        return rows;            
+        return await this.db.all(`SELECT * FROM entregas`);           
     }
 
     async listarPorStatus(status) {
-        const {rows} = await pool.query(`SELECT * FROM entregas WHERE status = $1`, [status])
-        return rows ?? null;
+        return await this.db.all(`SELECT * FROM entregas WHERE status = ?`, [status])
     }
 
     async buscarPorId(id) {
-        const {rows} = await pool.query(`SELECT * FROM entregas WHERE id = $1`, [id]);
-        return rows ?? null;
+        return await this.db.get(`SELECT * FROM entregas WHERE id = ?`, [id]);
     }
 
     async historicoPorId(idEntrega) {
-        const {rows} = await pool.query(
+        return await this.db.all(
             `SELECT id, informacoes, data, fk_id_entrega
             FROM eventos_entrega
-            WHERE fk_id_entrega = $1
+            WHERE fk_id_entrega = ?
             ORDER BY data DESC`, [idEntrega]);
-        
-        return rows ?? null;
     }
 
     async criar(dados) {
-        const {rows: entregasCriadas} = await pool.query(`INSERT INTO entregas
-            (descricao, origem, destino, status) VALUES ($1, $2, $3, $4)
+        const result = await this.db.run(`INSERT INTO entregas
+            (descricao, origem, destino, status, fk_id_motorista) VALUES (?, ?, ?, ?, ?)
             RETURNING id, descricao, origem, destino, status`,
-            [dados.descricao, dados.origem, dados.destino, 'CRIADA']);
+            [dados.descricao, dados.origem, dados.destino, 'CRIADA', dados.fk_id_motorista]);
 
-        const entrega = entregasCriadas;
+        const idNovaEntrega = result.lastID;
 
-        await pool.query(
-            `INSERT INTO eventos_entrega (informacoes, fk_id_entrega)
-            VALUES ($1, $2)`, 
-            [`Entrega 'CRIADA'`, entrega.id]);
-        
-        return entrega ?? null;
+        let infoEvento = "Entrega 'CRIADA'.";
+
+        if (dados.historico && dados.historico.length > 0) {
+            infoEvento = dados.historico[0].descricao;
+        }
+
+        await this.db.run(`INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)
+            `, [infoEvento, idNovaEntrega]);
+
+        return {id: idNovaEntrega, ...dados, status: 'CRIADA'};
     }
 
     async entregasDuplicadas(descricao, origem, destino) {
-        const {rows} = await pool.query(`
+        return await this.db.get(`
             SELECT * FROM entregas
-            WHERE descricao = $1 AND origem = $2 AND destino = $3`,
+            WHERE descricao = ? AND origem = ? AND destino = ?`,
             [descricao, origem, destino]);
-        
-        return rows ?? null;
     }
 
-    async atualizar(id, dados) {
-        const {descricao, origem, destino, status, fk_id_motorista} = dados;
-        
-        const {rows: atualizaEntrega} = await pool.query(
+async atualizar(id, dados) {
+        await this.db.run(
             `UPDATE entregas
-            SET descricao = $1, origem = $2, destino = $3, status = $4, fk_id_motorista = $5
-            WHERE id = $6
-            RETURNING *`,
-            [dados.descricao, dados.origem, dados.destino, dados.status, fk_id_motorista, id]);
-        
-        const entregaAtualizada = atualizaEntrega;
+            SET descricao = ?, origem = ?, destino = ?, status = ?, fk_id_motorista = ?
+            WHERE id = ?`,
+            [dados.descricao, dados.origem, dados.destino, dados.status, dados.fk_id_motorista, id]
+        );
 
-        if (entregaAtualizada) {
-            await pool.query(
-                `INSERT INTO eventos_entrega (informacoes, fk_id_entrega)
-                VALUES ($1, $2)`,
-                [`Status atualizado para: ${dados.status}`, id]
-            );
-        
-        return entregaAtualizada ?? null;
+        let infoEvento = `Status atualizado para: ${dados.status}`;
+
+        if (dados.historico && dados.historico.length > 0) {
+            const ultimoEvento = dados.historico[dados.historico.length - 1];
+            infoEvento = ultimoEvento.descricao;
         }
+        
+        await this.db.run(
+            `INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)`,
+            [infoEvento, id]
+        );
+        
+        return await this.buscarPorId(id);
     }
     
     async listaPorMotorista(motoristaId, status) {
-        let query = `SELECT * FROM entregas WHERE fk_id_motorista = $1`;
+        let query = `SELECT * FROM entregas WHERE fk_id_motorista = ?`;
         const valores = [motoristaId];
         
         if (status) {
-            query += `AND status = $2`;
+            query += `AND status = ?`;
             valores.push(status);
         }
 
-        const {rows} = await pool.query(query, valores);
-        return rows;
+        return await this.db.all(query, valores);
     }
 }

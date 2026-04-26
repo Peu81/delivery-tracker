@@ -1,5 +1,6 @@
 
 import {raw, Router} from 'express';
+import { openDb } from '../config/db.init.js';
 import { entregasDatabase } from "../database/entregas.database.js";
 import { entregasRepository } from "../repositories/entregas.repository.js";
 import { entregasService } from "../services/entregas.service.js";
@@ -13,9 +14,9 @@ import { motoristasController } from '../controllers/motoristas.controller.js';
 const entregasRouter = new Router();
 const motoristasRouter = new Router();
 
-const database = new entregasDatabase();
-const entregaRepo = new entregasRepository(database);
-const motoristaRepo = new motoristasRepository(database)
+const db = await openDb();
+const entregaRepo = new entregasRepository(db);
+const motoristaRepo = new motoristasRepository(db)
 const entregaService = new entregasService(entregaRepo, motoristaRepo);
 const motoristaService = new motoristasService(motoristaRepo)
 const entregaController = new entregasController(entregaService);
