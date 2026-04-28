@@ -8,7 +8,7 @@ import { entregasController } from "../controllers/entregas.controller.js";
 import { motoristasRepository } from '../repositories/motoristas.repository.js';
 import { motoristasService } from '../services/motoristas.service.js';
 import { motoristasController } from '../controllers/motoristas.controller.js';
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
 
 
 

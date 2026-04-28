@@ -2,9 +2,6 @@
 @implements {IEntregasRepository}
 */
 
-import { info } from "node:console";
-import { describe } from "node:test";
-
 export class entregasRepository {
     constructor(prisma) {
         this.prisma = prisma;
@@ -36,13 +33,13 @@ export class entregasRepository {
         }
 
         const [data, total] = await Promise.all([
-            prisma.entrega.findMany({
+            this.prisma.entrega.findMany({
                 where, 
                 skip, 
                 take: limit, 
                 orderBy: {id: 'asc'}
             }),
-        prisma.entrega.count({where})]
+            this.prisma.entrega.count({where})]
         );
         
         const totalPaginas = Math.ceil(total/limit);
@@ -63,7 +60,7 @@ export class entregasRepository {
     }
 
     async historicoPorId(idEntrega) {
-        return await this.prisma.entrega.findUnique({
+        return await this.prisma.entrega.findMany({
             where: {fk_id_entrega: Number(idEntrega)},
             orderBy: {createdAt: 'desc'}
         });

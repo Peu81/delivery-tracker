@@ -19,7 +19,7 @@ export class motoristasRepository {
             });
 
         } catch (error) {
-            if (error.message.includes('UNIQUE constraint failed')) {
+            if (error.code === 'P2002' || error.message.includes('UNIQUE constraint failed')) {
                 throw new AppError('CPF já cadastrado.', 409);
             }
             console.error("ERRO DO BANCO:", error); 
@@ -51,8 +51,7 @@ export class motoristasRepository {
     }
 
     async atualizar(id, dados) {
-        const {nome, placaVeiculo, status} = dados;
-        await this.prisma.entrega.update({
+        await this.prisma.motorista.update({
             where: {id: Number(id)},
             data: {
                 nome: dados.nome,
