@@ -11,9 +11,44 @@ export class entregasRepository {
     }
 
     async listarTodos(filtros = {}) {
-        return await this.prisma.entrega.findMany();           
-    }
+        const page = parseInt(filtros.page) || 1;
+        const limit = Math.min(parseInt(filtros.limit) || 10, 50);
+        const skip = (page - 1) * limit;
+        
+        const where = {};
 
+        if (filtros.status) {
+            where.status = filtros.status;
+        }
+
+        if (filtros.motoristaId) {
+            where.motoristaId = parseInt(filtros.motoristaId);
+        }
+        
+        if (filtros.createdDe || filtros.createdAte) {
+            where.createdAt = {};
+            if (filtros.createdDe) {
+                where.createdAt.gte = new Date(filtros.createdDe)
+            }
+            if (filtros.createdAte) {
+                where.createdAt.lte = new Date(filtros.createdAte)
+            }
+        }
+
+        const [data, total] = await Promise.all([
+            prisma.entrega.findMany({
+                where, 
+                skip, 
+                take: limit, 
+                orderBy: {id: 'asc'}
+            }),
+        prisma.entrega.count({where})]
+        );
+        
+        const totalPaginas = Math.ceil(total/limit);
+
+        return {data, total, page, limit, totalPaginas}
+    }
     async listarPorStatus(status) {
         return await this.prisma.entrega.findMany({
             where: {status}
