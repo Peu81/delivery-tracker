@@ -8,17 +8,18 @@ import { entregasController } from "../controllers/entregas.controller.js";
 import { motoristasRepository } from '../repositories/motoristas.repository.js';
 import { motoristasService } from '../services/motoristas.service.js';
 import { motoristasController } from '../controllers/motoristas.controller.js';
+import { PrismaClient } from '../generated/prisma/index.js';
 
 
 
 const entregasRouter = new Router();
 const motoristasRouter = new Router();
 
-const db = await openDb();
-const entregaRepo = new entregasRepository(db);
-const motoristaRepo = new motoristasRepository(db)
+const prisma = new PrismaClient();
+const entregaRepo = new entregasRepository(prisma);
+const motoristaRepo = new motoristasRepository(prisma);
 const entregaService = new entregasService(entregaRepo, motoristaRepo);
-const motoristaService = new motoristasService(motoristaRepo)
+const motoristaService = new motoristasService(motoristaRepo);
 const entregaController = new entregasController(entregaService);
 const motoristaController = new motoristasController(motoristaService);
 

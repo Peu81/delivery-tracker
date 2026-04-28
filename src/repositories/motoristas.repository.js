@@ -34,32 +34,14 @@ export class motoristasRepository {
     }
     
     async listarTodos(filtros = {}) {
-        let query = `SELECT id, 
-            nome, 
-            cpf, 
-            placaVeiculo, 
-            status FROM motoristas`;
-        
-        const valores = [];
-        const condicoes = [];
+        const where = {};
+        if (filtros.status) where.status = filtros.status;
+        if (filtros.id) where.id = filtros.id;
 
-        if (filtros.status) {
-            condicoes.push(`status = ?`);
-            valores.push(filtros.status);
-        }
-
-        if (filtros.id) {
-            condicoes.push(`id = ?`);
-            valores.push(filtros.id);
-        }
-
-        if (condicoes.length > 0) {
-            query += `\nWHERE ` + condicoes.join(` AND `);
-        }
-
-        query += `\nORDER BY id`;
-
-        return await this.db.all(query, valores)
+        return await this.prisma.motorista.findMany({
+            where,
+            orderBy: {id: 'asc'}
+        });
     }
 
     async buscarPorId(id) {
@@ -78,7 +60,5 @@ export class motoristasRepository {
                 status: dados.status
             }
         });
-
-        return await this.buscarPorId(id)
     }
 }

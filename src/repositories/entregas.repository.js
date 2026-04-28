@@ -11,7 +11,7 @@ export class entregasRepository {
     }
 
     async listarTodos(filtros = {}) {
-        return await this.db.all(`SELECT * FROM entregas`);           
+        return await this.prisma.entrega.findMany();           
     }
 
     async listarPorStatus(status) {
@@ -46,26 +46,19 @@ export class entregasRepository {
                 descricao: dados.descricao,
                 origem: dados.origem,
                 destino: dados.destino,
-                status: dados.status,
+                status: dados.status || 'CRIADA',
                 fk_id_motorista: Number(dados.fk_id_motorista),
-                eventos: {create: [{infoEvento}]}
+                eventos: {create: [{informacoes: infoEvento}]}
             }});
-
-        const idNovaEntrega = result.lastID;
-
-        await this.db.run(`INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)
-            `, [infoEvento, idNovaEntrega]);
-
-        return {id: idNovaEntrega, ...dados, status: 'CRIADA'};
     }
 
     async entregasDuplicadas(descricao, origem, destino) {
-        return await this.prisma.findFirst(
+        return await this.prisma.entrega.findFirst(
             {where: {descricao, origem, destino}}
         );
     }
 
-async atualizar(id, dados) {
+    async atualizar(id, dados) {
         let infoEvento = `Status atualizado para: ${dados.status}`;
 
         if (dados.historico && dados.historico.length > 0) {
@@ -73,22 +66,18 @@ async atualizar(id, dados) {
             infoEvento = ultimoEvento.descricao;
         }
 
-    await this.prisma.entrega.update( 
-        {where: {id: Number(id)},
-        data: {
-            descricao: dados.descricao,
-            origem: dados.origem,
-            destino: dados.destino,
-            status: dados.status,
-            fk_id_motorista: Number(dados.fk_id_motorista),
-            eventos: {create: [{informacoes: infoEvento}]}
-        }
-    }
-);
-        
-        await this.db.run(
-            `INSERT INTO eventos_entrega (informacoes, fk_id_entrega) VALUES (?, ?)`,
-            [infoEvento, id]
+        await this.prisma.entrega.update( 
+                {where: {id: Number(id)},
+                data: {
+                    descricao: dados.descricao,
+                    origem: dados.origem,
+                    destino: dados.destino,
+                    status: dados.status,
+                    fk_id_motorista: Number(dados.fk_id_motorista),
+                    eventos: {create: [{informacoes: infoEvento}]}
+                },
+                include: {eventos: true}
+            }
         );
         
         return await this.buscarPorId(id);
