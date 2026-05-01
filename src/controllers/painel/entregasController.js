@@ -1,4 +1,4 @@
-export class EntregasController {
+export class entregasController {
     constructor(service) {
         this.service = service;
         this.formularioVazio = this.formularioVazio.bind(this)

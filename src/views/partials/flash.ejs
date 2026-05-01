@@ -1,0 +1,16 @@
+
+<% if (typeof flash !== 'undefined') { %>
+
+    <% if (flash.sucesso) { %>
+    <div class="alert alert-success">
+        <p><% flash.sucesso %></p>
+    </div>
+    <% } %>
+
+    <% if (flash.erro) { %>
+    <div class="alert alert-success">
+        <p><% flash.erro %></p>
+    </div>
+    <% } %>
+    
+<% } %>

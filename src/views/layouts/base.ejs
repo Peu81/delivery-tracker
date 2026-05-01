@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        <title><%= typeof titulo !== 'undefined' ? titulo: 'API ENTREGAS' %></title>
+    </head>
+
+    <body>
+        
+        <%- include('../partials/nav')%>
+        <%- include('../partials/flash')%>
+        <%- body %>
+
+        <footer>
+            <p>Delivery Tracker - Painel Admnistrativo</p>
+        </footer>
+    </body>
+</html>
