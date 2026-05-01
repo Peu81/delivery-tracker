@@ -38,8 +38,8 @@ model Entrega {
   status statusEntrega @default(CRIADA)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  fk_id_motorista Int @map("id_motorista")
-  motorista Motorista @relation(fields: [fk_id_motorista], references: [id])
+  fk_id_motorista Int? @map("id_motorista")
+  motorista Motorista? @relation(fields: [fk_id_motorista], references: [id])
   eventos EventoEntrega[]
 }
 

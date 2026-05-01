@@ -19,7 +19,7 @@ export class entregasRepository {
         }
 
         if (filtros.motoristaId) {
-            where.motoristaId = parseInt(filtros.motoristaId);
+            where.fk_id_motorista = parseInt(filtros.motoristaId);
         }
         
         if (filtros.createdDe || filtros.createdAte) {
@@ -60,7 +60,7 @@ export class entregasRepository {
     }
 
     async historicoPorId(idEntrega) {
-        return await this.prisma.entrega.findMany({
+        return await this.prisma.eventoEntrega.findMany({
             where: {fk_id_entrega: Number(idEntrega)},
             orderBy: {createdAt: 'desc'}
         });
@@ -73,15 +73,17 @@ export class entregasRepository {
             infoEvento = dados.historico[0].descricao;
         }
 
-        const result = await this.prisma.entrega.create({
+        return await this.prisma.entrega.create({
             data: {
                 descricao: dados.descricao,
                 origem: dados.origem,
                 destino: dados.destino,
                 status: dados.status || 'CRIADA',
-                fk_id_motorista: Number(dados.fk_id_motorista),
+                ...(dados.fk_id_motorista !== undefined && {
+                    fk_id_motorista: Number(dados.fk_id_motorista)}),
                 eventos: {create: [{informacoes: infoEvento}]}
             }});
+
     }
 
     async entregasDuplicadas(descricao, origem, destino) {
@@ -105,7 +107,8 @@ export class entregasRepository {
                     origem: dados.origem,
                     destino: dados.destino,
                     status: dados.status,
-                    fk_id_motorista: Number(dados.fk_id_motorista),
+                    ...(dados.fk_id_motorista !== undefined && {
+                    fk_id_motorista: Number(dados.fk_id_motorista)}),
                     eventos: {create: [{informacoes: infoEvento}]}
                 },
                 include: {eventos: true}
