@@ -1,13 +1,13 @@
 
 import {raw, Router} from 'express';
 import { openDb } from '../config/db.init.js';
-import { entregasDatabase } from "../database/entregas.database.js";
-import { entregasRepository } from "../repositories/entregas.repository.js";
-import { entregasService } from "../services/entregas.service.js";
-import { entregasController } from "../controllers/entregas.controller.js";
-import { motoristasRepository } from '../repositories/motoristas.repository.js';
-import { motoristasService } from '../services/motoristas.service.js';
-import { motoristasController } from '../controllers/motoristas.controller.js';
+import { entregasDatabase } from "../database/entregasDatabase.js";
+import { entregasRepository } from "../repositories/entregasRepository.js";
+import { entregasService } from "../services/entregasService.js";
+import { entregasController } from "../controllers/entregasController.js";
+import { motoristasRepository } from '../repositories/motoristasRepository.js';
+import { motoristasService } from '../services/motoristasService.js';
+import { motoristasController } from '../controllers/motoristasController.js';
 import { PrismaClient } from '@prisma/client';
 
 
