@@ -34,8 +34,8 @@ export class entregasRepository {
 
         const [data, total] = await Promise.all([
             this.prisma.entrega.findMany({
-                where, 
-                skip, 
+                where: where, 
+                skip: skip, 
                 take: limit, 
                 orderBy: {id: 'asc'}
             }),
@@ -48,7 +48,7 @@ export class entregasRepository {
     }
     async listarPorStatus(status) {
         return await this.prisma.entrega.findMany({
-            where: {status}
+            where: {status: status}
         });
     }
 
