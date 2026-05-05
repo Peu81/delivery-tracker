@@ -1,0 +1,56 @@
+<main class="container">
+    <div class="page-header">
+        <h1>Detalhes da entrega #<%= entrega.id %></h1>
+        <a href="/painel/entregas" class="botao">Voltar a listagem</a>
+    </div>
+
+    <div class="lista-entregas">
+        <p>Descrição:  <%= entrega.descricao %></p>
+        <p>Origem:  <%= entrega.origem %></p>
+        <p>Destino:  <%= entrega.destino %></p>
+        <p>Status:  <%= entrega.status %></p>
+    </div>
+
+    <section class="acoes">
+        <form action="/painel/entregas/<%= entrega.id %>/avancar" method="POST">
+            <input type="hidden" name="_method" value="PATCH">
+            <button type="submit" class="botao botao-sucesso">Avançar status</button> 
+        </form>
+
+        <form action="/painel/entregas/<%= entrega.id %>/cancelar" method="POST">
+            <input type="hidden" name="_method" value="PATCH">
+            <button type="submit" class="botao botao-erro">Cancelar entrega</button> 
+        </form>
+
+        <form action="/painel/entregas/<%= entrega.id %>/atribuiMotorista" method="POST">
+            <input type="hidden" name="_method" value="PATCH">
+            <select name="motoristaId" required>
+                <option value="" disabled selected>Escolha um motorista</option>
+                <% if (typeof motoristas !== 'undefined') { %>
+                    <% motoristas.forEach(m => { %>
+                        <option value="<%= m.id %>"><%= m.nome %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+
+            <button type="submit" class="botao botao-sucesso">Atribuir motorista</button> 
+        </form>
+
+    </section>
+
+    <section class="historico">
+        <h2>Histórico de eventos</h2>
+        <% if (typeof historico !== 'undefined' && historico.length > 0) { %>
+            <ul>
+                <% historico.forEach(evento => { %>
+                    <li>
+                        <%= new Date(evento.data) %>:
+                        <%= evento.descricao %>
+                    </li>
+                <% }) %>    
+            </ul>
+        <% } else { %>
+            <p>Não há eventos registrados para esta entrega.</p>
+        <% } %>
+    </section>
+</main>

@@ -1,0 +1,43 @@
+<main class="container">
+    <div class="page-header">
+        <h1>Entregas</h1>
+        <a href="/painel/entregas/nova" class="botao">Nova entrega</a>
+    </div>
+    
+    <form action="/painel/entregas" method="GET" class="filtro-form">
+        <label for="status">Filtro por Status:</label>
+        <select name="status" id="status">
+            <option value="">Todos</option>
+            <option value="CRIADA">Criada</option>
+            <option value="EM_TRANSITO">Em trânsito</option>
+            <option value="ENTREGUE">Entregue</option>
+            <option value="CANCELADO">Cancelada</option>
+        </select>
+        <button type="submit" class="botao">Filtrar</button>
+    </form>
+
+
+    <% if (typeof entregas === 'undefined' || entregas.length === 0) { %>
+        <p class="vazio">Não há entregas cadastradas.</p>
+    <% } else { %>
+        <table class="tabela">
+            <thead>
+                <tr><th>Descrição</th><th>Origem</th><th>Destino</th><th>Status</th><th>Motorista</th><th>Data</th><th>Ações</th></tr>
+            </thead>
+
+            <tbody>
+                <% entregas.forEach(e => { %>
+                    <tr>
+                        <td><%= e.descricao %></td>
+                        <td><%= e.origem %></td>
+                        <td><%= e.destino %></td>
+                        <td><span class="badge badge-<%= e.status.toLowerCase() %>"><%= e.status %></span></td>
+                        <td><%= e.fk_id_motorista ? e.fk_id_motorista : 'Não atribuído' %></td>
+                        <td><%= new Date(e.createdAt).toLocaleDateString('pt-BR') %></td>
+                        <td><a href="/painel/entregas/<%= e.id %>" class="botao pequeno">Detalhes</a></td>
+                    </tr>
+               <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+</main>

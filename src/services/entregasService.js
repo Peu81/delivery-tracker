@@ -92,15 +92,13 @@ export class entregasService {
             }      
         }
         
-        const novoHistorico = {
-            data: new Date().toISOString().split('T')[0],
+        const novoEvento = {
             descricao: `Status alterado para: ${dados.status}`
         }
 
         const dadosAtualizados = {
-            ...entregaExiste,
             status: dados.status,
-            historico: [...(entregaExiste.historico || []), novoHistorico]
+            eventos: {create: novoEvento}
         }
 
         return this.repository.atualizar(id, dadosAtualizados);
@@ -126,7 +124,7 @@ export class entregasService {
 
         let mensagem = ""; 
 
-        if (!entregaExiste.motoristaId) {
+        if (!entregaExiste.fk_motorista_id) {
             mensagem = `Motorista ${motorista.nome} atribuído.`;
         }
 
@@ -134,15 +132,14 @@ export class entregasService {
             mensagem = `Motorista anterior substituido por ${motorista.nome}.`
         }
         
-        const novoHistorico = {
+        const novoEvento = {
         data: new Date().toISOString().split('T')[0],
         descricao: mensagem
         }
 
         const dadosAtualizados = {
-            ...entregaExiste,
-            motoristaId: motoristaId,
-            historico: [...entregaExiste.historico, novoHistorico]
+            fk_id_motorista: motoristaId,
+            eventos: [novoEvento]
         }
         return this.repository.atualizar(entregaId, dadosAtualizados);        
     }

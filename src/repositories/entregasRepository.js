@@ -100,6 +100,8 @@ export class entregasRepository {
             infoEvento = ultimoEvento.descricao;
         }
 
+        const idMotorista = dados.motoristaId || dados.fk_id_motorista;
+        
         await this.prisma.entrega.update( 
                 {where: {id: Number(id)},
                 data: {

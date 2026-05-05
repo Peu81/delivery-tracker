@@ -18,7 +18,7 @@ const apiEntregasRouter = new Router();
 const apiMotoristasRouter = new Router();
 const painelEntregasRouter = new Router();
 const painelMotoristasRouter = new Router();
-
+const painelRouter = new Router();
 
 const prisma = new PrismaClient();
 const entregaRepo = new entregasRepository(prisma);
@@ -30,7 +30,7 @@ const motoristaService = new motoristasService(motoristaRepo);
 const apiEntregaCtlr = new apiEntregasController(entregaService);
 const apiMotoristaCtlr = new apiMotoristasController(motoristaService);
 
-const painelEntregaCtlr = new painelEntregasController(entregaService);
+const painelEntregaCtlr = new painelEntregasController(entregaService, motoristaService);
 const painelMotoristaCtlr = new painelMotoristasController(motoristaService);
 
 apiEntregasRouter.get('/', (req, res, next) => apiEntregaCtlr.listarTodos(req, res, next));
@@ -47,13 +47,20 @@ apiMotoristasRouter.get('/:id', (req, res, next) => apiMotoristaCtlr.buscarPorId
 apiMotoristasRouter.get('/:id/entregas', (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
 apiMotoristasRouter.patch('/:id/inativar', (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
 
+painelRouter.get('/', (req, res) => res.render('painel'))
+
+painelEntregasRouter.get('/', (req, res, next) => painelEntregaCtlr.index(req, res, next));
+painelEntregasRouter.get('/nova', (req, res, next) => painelEntregaCtlr.formularioVazio(req, res, next));
+painelEntregasRouter.post('/', (req, res, next) => painelEntregaCtlr.nova(req, res, next));
+painelEntregasRouter.get('/:id', (req, res, next) => painelEntregaCtlr.detalhe(req, res, next));
+painelEntregasRouter.patch('/:id/avancar', (req, res, next) => painelEntregaCtlr.avancarStatus(req, res, next));
+painelEntregasRouter.patch('/:id/cancelar', (req, res, next) => painelEntregaCtlr.cancelar(req, res, next));
+painelEntregasRouter.patch('/:id/atribuiMotorista', (req, res, next) => painelEntregaCtlr.atribuiMotorista(req, res, next));
+
 
 painelMotoristasRouter.get('/', (req, res, next) => painelMotoristaCtlr.index(req, res, next));
 painelMotoristasRouter.get('/novo', (req, res, next) => painelMotoristaCtlr.formularioVazio(req, res, next));
 painelMotoristasRouter.post('/', (req, res, next) => painelMotoristaCtlr.novo(req, res, next));
 
 
-export {apiEntregasRouter};
-export {apiMotoristasRouter};
-export {painelEntregasRouter};
-export {painelMotoristasRouter};
+export {apiEntregasRouter, apiMotoristasRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter};

@@ -1,0 +1,50 @@
+<div class="formulario">
+  <h1>Nova Entrega</h1>
+
+  <% if (typeof erro !== 'undefined' && erro){ %> 
+    <div class="erros"> <%= erro %> </div>
+   <% } %>
+
+  <form method="POST" action="/painel/entregas">
+    <div class="form-group">
+      <label for="descricao">Descrição</label>
+      <input
+        type="text"
+        id="descricao"
+        name="descricao"
+        value="<%= typeof entrega !== 'undefined' && entrega.descricao ? entrega.descricao : '' %>"
+        placeholder="Descrição do produto"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="origem">Origem:</label>
+      <input
+        type="text"
+        id="origem"
+        name="origem"
+        value="<%= typeof entrega !== 'undefined' && entrega.origem ? entrega.origem : '' %>"
+        placeholder="Origem do pacote"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="destino">Destino</label>
+      <input
+        type="text"
+        id="destino"
+        name="destino"
+        value="<%= typeof entrega !== 'undefined' && entrega.destino ? entrega.destino : '' %>"
+        placeholder="Destino do pacote"
+        required
+      >
+    </div>
+
+    <div class="form-actions">
+      <a href="/painel" class="botao">Cancelar</a>
+      <button type="submit" class="botao">Criar Entrega</button>
+    </div>
+  </form>
+</div>

@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
-import { apiEntregasRouter, apiMotoristasRouter, painelEntregasRouter, painelMotoristasRouter } from './routes/entregasRoutes.js';
+import methodOverride from 'method-override';
+import { apiEntregasRouter, apiMotoristasRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter } from './routes/entregasRoutes.js';
 import { middlewareDeErros } from './middlewares/errosMiddlewares.js';
 import { fileURLToPath } from 'url';
 import { dirname, join }  from 'path';
@@ -20,11 +21,19 @@ app.set('views', join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(join(__dirname, '..', 'public')));
+app.use(methodOverride(function (req, res){
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        const method = req.body._method;
+        delete req.body._method;
+        return method;
+    }
+}))
 
 app.use(morgan(":method :url :status Body: :body "));
 
 app.use('/api/entregas', apiEntregasRouter);
 app.use('/api/motoristas', apiMotoristasRouter);
+app.use('/painel', painelRouter)
 app.use('/painel/entregas', painelEntregasRouter);
 app.use('/painel/motoristas', painelMotoristasRouter);
 app.use(middlewareDeErros);
