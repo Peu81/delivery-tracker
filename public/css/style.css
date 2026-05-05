@@ -1,0 +1,14 @@
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+
+.badge-criada { background-color: #6c757d; }       
+.badge-em_transito { background-color: #007bff; }  
+.badge-entregue { background-color: #28a745; }     
+.badge-cancelada { background-color: #dc3545; }   

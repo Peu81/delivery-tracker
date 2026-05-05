@@ -5,6 +5,7 @@ import { apiEntregasRouter, apiMotoristasRouter, painelEntregasRouter, painelMot
 import { middlewareDeErros } from './middlewares/errosMiddlewares.js';
 import { fileURLToPath } from 'url';
 import { dirname, join }  from 'path';
+import expressLayouts from 'express-ejs-layouts';
 
 
 const app = express();
@@ -21,6 +22,8 @@ app.set('views', join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(join(__dirname, '..', 'public')));
+app.use(expressLayouts);
+app.set('layout', 'layouts/base');
 app.use(methodOverride(function (req, res){
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
         const method = req.body._method;
