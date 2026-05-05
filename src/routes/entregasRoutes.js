@@ -47,7 +47,7 @@ apiMotoristasRouter.get('/:id', (req, res, next) => apiMotoristaCtlr.buscarPorId
 apiMotoristasRouter.get('/:id/entregas', (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
 apiMotoristasRouter.patch('/:id/inativar', (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
 
-painelRouter.get('/', (req, res) => res.render('painel'))
+painelRouter.get('/', (req, res) => res.render('painel'));
 
 painelEntregasRouter.get('/', (req, res, next) => painelEntregaCtlr.index(req, res, next));
 painelEntregasRouter.get('/nova', (req, res, next) => painelEntregaCtlr.formularioVazio(req, res, next));
