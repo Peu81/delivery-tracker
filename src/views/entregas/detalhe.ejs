@@ -42,10 +42,10 @@
         <h2>Histórico de eventos</h2>
         <% if (typeof historico !== 'undefined' && historico.length > 0) { %>
             <ul>
-                <% historico.forEach(evento => { %>
+                <% historico.forEach(h => { %>
                     <li>
-                        <%= new Date(evento.data) %>:
-                        <%= evento.descricao %>
+                        <%= new Date(h.createdAt) %>:
+                        <%= h.informacoes %>
                     </li>
                 <% }) %>    
             </ul>

@@ -93,29 +93,10 @@ export class entregasRepository {
     }
 
     async atualizar(id, dados) {
-        let infoEvento = `Status atualizado para: ${dados.status}`;
-
-        if (dados.historico && dados.historico.length > 0) {
-            const ultimoEvento = dados.historico[dados.historico.length - 1];
-            infoEvento = ultimoEvento.descricao;
-        }
-
-        const idMotorista = dados.motoristaId || dados.fk_id_motorista;
-        
-        await this.prisma.entrega.update( 
+            await this.prisma.entrega.update( 
                 {where: {id: Number(id)},
-                data: {
-                    descricao: dados.descricao,
-                    origem: dados.origem,
-                    destino: dados.destino,
-                    status: dados.status,
-                    ...(dados.fk_id_motorista !== undefined && {
-                    fk_id_motorista: Number(dados.fk_id_motorista)}),
-                    eventos: {create: [{informacoes: infoEvento}]}
-                },
-                include: {eventos: true}
-            }
-        );
+                data: dados
+            });
         
         return await this.buscarPorId(id);
     }

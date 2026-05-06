@@ -60,9 +60,16 @@ export class entregasService {
         const entrega = await this._entregaOuErro(Number(id));
         const proximoStatus = fluxoEntrega[entrega.status];
 
+        if (proximoStatus === "EM_TRANSITO") {
+            if (!entrega.fk_id_motorista) {
+                throw new AppError("Não é possível iniciar o trânsito, pois nenhum motorista foi atribuído.", 422);
+                
+            };   
+        
         if (!proximoStatus) {
-            throw new AppError(`Não é possível avançar. Status atual: '${entrega.status}'`, 409);   
-        }
+            throw new AppError(`Não é possível avançar. Status atual: '${entrega.status}'`, 409);
+            };
+        };
          
         return this.atualizar(Number(id), {"status": proximoStatus});
     }
@@ -94,7 +101,7 @@ export class entregasService {
         }
         
         const novoEvento = {
-            descricao: `Status alterado para: ${dados.status}`
+            informacoes: `Status alterado para: ${dados.status}`
         }
 
         const dadosAtualizados = {
@@ -132,15 +139,10 @@ export class entregasService {
         else {
             mensagem = `Motorista anterior substituido por ${motorista.nome}.`
         }
-        
-        const novoEvento = {
-        data: new Date().toISOString().split('T')[0],
-        descricao: mensagem
-        }
 
         const dadosAtualizados = {
-            fk_id_motorista: motoristaId,
-            eventos: [novoEvento]
+            fk_id_motorista: Number(motoristaId),
+            eventos: {create: {informacoes: mensagem}}
         }
         return this.repository.atualizar(entregaId, dadosAtualizados);        
     }
