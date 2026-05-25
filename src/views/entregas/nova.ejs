@@ -1,6 +1,6 @@
 <div class="formulario">
+  <a href="/painel" class="botao">Voltar ao menu principal</a> 
   <h1>Nova Entrega</h1>
-
   <% if (typeof erro !== 'undefined' && erro){ %> 
     <div class="erros"> <%= erro %> </div>
    <% } %>
@@ -43,7 +43,6 @@
     </div>
 
     <div class="form-actions">
-      <a href="/painel" class="botao">Cancelar</a>
       <button type="submit" class="botao">Criar Entrega</button>
     </div>
   </form>
