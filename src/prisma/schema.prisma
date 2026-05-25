@@ -19,6 +19,11 @@ enum statusEntrega {
   CANCELADA
 }
 
+enum papeis {
+  OPERADOR
+  GESTOR
+}
+
 model Motorista {
   id Int @id @default(autoincrement())
   nome String
@@ -40,6 +45,8 @@ model Entrega {
   updatedAt DateTime @updatedAt
   fk_id_motorista Int? @map("id_motorista")
   motorista Motorista? @relation(fields: [fk_id_motorista], references: [id])
+  criadorId Int? @map("criadorId") 
+  criador Usuario? @relation(fields: [criadorId], references: [id])
   eventos EventoEntrega[]
 }
 
@@ -50,4 +57,12 @@ model EventoEntrega {
   updatedAt DateTime @updatedAt
   fk_id_entrega Int @map("id_entrega")
   entrega Entrega @relation(fields: [fk_id_entrega], references: [id], onDelete: Cascade)
+}
+
+model Usuario {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
+  papel papeis @default(OPERADOR)
 }
