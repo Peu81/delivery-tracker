@@ -1,3 +1,4 @@
+
 /**
 @implements {IUsuariosRepository}
 */
@@ -16,8 +17,9 @@ export class usuariosRepository {
                 papel: dados.papel 
             }})
         } catch (error) {
-            throw new Error("erro teste", error);
-            
+            if (error.code === 'P2002' || error.message.includes('UNIQUE constraint failed')) {
+                throw new AppError("E-mail já cadastrado.", 409);
+            }  
         }
     }
 
