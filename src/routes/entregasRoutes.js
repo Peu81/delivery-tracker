@@ -10,12 +10,16 @@ import { motoristasService } from '../services/motoristasService.js';
 import { motoristasController as apiMotoristasController} from '../controllers/api/motoristasController.js';
 import { entregasController as painelEntregasController} from "../controllers/painel/entregasController.js";
 import { motoristasController as painelMotoristasController} from '../controllers/painel/motoristasController.js';
+import { usuariosRepository } from "../repositories/usuariosRepository.js";
+import { usuariosService } from "../services/usuariosService.js";
+import { usuariosController as apiUsuariosController } from "../controllers/api/usuariosController.js";
 import { PrismaClient } from '@prisma/client';
 
 
 
 const apiEntregasRouter = new Router();
 const apiMotoristasRouter = new Router();
+const apiUsuariosRouter = new Router();
 const painelEntregasRouter = new Router();
 const painelMotoristasRouter = new Router();
 const painelRouter = new Router();
@@ -23,12 +27,15 @@ const painelRouter = new Router();
 const prisma = new PrismaClient();
 const entregaRepo = new entregasRepository(prisma);
 const motoristaRepo = new motoristasRepository(prisma);
+const usuariosRepo = new usuariosRepository(prisma)
 
 const entregaService = new entregasService(entregaRepo, motoristaRepo);
 const motoristaService = new motoristasService(motoristaRepo);
+const usuarioService = new usuariosService(usuariosRepo);
 
 const apiEntregaCtlr = new apiEntregasController(entregaService);
 const apiMotoristaCtlr = new apiMotoristasController(motoristaService);
+const apiUsuarioCtlr = new apiUsuariosController(usuarioService);
 
 const painelEntregaCtlr = new painelEntregasController(entregaService, motoristaService);
 const painelMotoristaCtlr = new painelMotoristasController(motoristaService);
@@ -47,6 +54,9 @@ apiMotoristasRouter.get('/:id', (req, res, next) => apiMotoristaCtlr.buscarPorId
 apiMotoristasRouter.get('/:id/entregas', (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
 apiMotoristasRouter.patch('/:id/inativar', (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
 
+apiUsuariosRouter.post('/registrar', (req, res, next) => apiUsuarioCtlr.criar(req, res, next));
+apiUsuariosRouter.post('/login', (req, res, next) => apiUsuarioCtlr.login(req, res, next));
+
 painelRouter.get('/', (req, res) => res.render('painel'));
 
 painelEntregasRouter.get('/', (req, res, next) => painelEntregaCtlr.index(req, res, next));
@@ -63,4 +73,4 @@ painelMotoristasRouter.get('/novo', (req, res, next) => painelMotoristaCtlr.form
 painelMotoristasRouter.post('/', (req, res, next) => painelMotoristaCtlr.novo(req, res, next));
 
 
-export {apiEntregasRouter, apiMotoristasRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter};
+export {apiEntregasRouter, apiMotoristasRouter, apiUsuariosRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter};
