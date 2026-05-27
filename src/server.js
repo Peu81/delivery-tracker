@@ -6,6 +6,7 @@ import { middlewareDeErros } from './middlewares/errosMiddlewares.js';
 import { fileURLToPath } from 'url';
 import { dirname, join }  from 'path';
 import expressLayouts from 'express-ejs-layouts';
+import { autenticar } from './middlewares/autenticacaoMiddlewares.js';
 
 
 const app = express();
@@ -34,8 +35,8 @@ app.use(methodOverride(function (req, res){
 
 app.use(morgan(":method :url :status Body: :body "));
 
-app.use('/api/entregas', apiEntregasRouter);
-app.use('/api/motoristas', apiMotoristasRouter);
+app.use('/api/entregas', autenticar, apiEntregasRouter);
+app.use('/api/motoristas', autenticar, apiMotoristasRouter);
 app.use('/api/auth', apiUsuariosRouter);
 app.use('/painel', painelRouter);
 app.use('/painel/entregas', painelEntregasRouter);
