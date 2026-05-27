@@ -52,6 +52,7 @@ export class entregasController {
 
     async criar(req, res, next) {
         try {
+            req.body.criadorId = req.usuario.id;
             const novaEntrega = await this.service.criar(req.body);
             res.status(201).json(novaEntrega);
         } catch (error) {
