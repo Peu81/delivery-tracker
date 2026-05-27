@@ -37,7 +37,7 @@ app.use(morgan(":method :url :status Body: :body "));
 app.use('/api/entregas', apiEntregasRouter);
 app.use('/api/motoristas', apiMotoristasRouter);
 app.use('/api/auth', apiUsuariosRouter);
-app.use('/painel', painelRouter)
+app.use('/painel', painelRouter);
 app.use('/painel/entregas', painelEntregasRouter);
 app.use('/painel/motoristas', painelMotoristasRouter);
 app.use(middlewareDeErros);

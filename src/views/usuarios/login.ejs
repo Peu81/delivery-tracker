@@ -1,0 +1,33 @@
+<main>
+    <div class="formulario">
+        <h1>Login</h1>
+        <form id="form-registro">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="text"
+                id="email"
+                name="email"
+                value="<%= typeof usuario !== 'undefined' && usuario.email ? usuario.email : '' %>"
+                placeholder="Email do usuário"
+                required
+            >
+            </div>
+                <div class="form-group">
+                  <label for="senha">Senha</label>
+                  <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    value="<%= typeof senha !== 'undefined' && usuario.senha ? usuario.senha : '' %>"
+                    placeholder="Senha"
+                    required
+                >
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="botao">Fazer login</button>
+                <a href="/painel/registrar" class="botao">Cadastro</a>
+              </div>
+        </form>      
+    </div>
+</main>

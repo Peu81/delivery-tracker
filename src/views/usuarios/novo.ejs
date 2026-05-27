@@ -1,0 +1,40 @@
+<div class="formulario">
+    <h1>Registrar</h1>
+    <form id="form-registro" action="/api/auth/registrar" method="POST">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            value="<%= typeof usuario !== 'undefined' && usuario.nome ? usuario.nome : '' %>"
+            placeholder="Nome completo"
+            required
+        >
+          <label for="login">Email</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            value="<%= typeof usuario !== 'undefined' && usuario.email ? usuario.email : '' %>"
+            placeholder="Email do usuário"
+            required
+        >
+        </div>
+            <div class="form-group">
+              <label for="senha">Senha</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                value="<%= typeof usuario !== 'undefined' && usuario.senha ? usuario.senha : '' %>"
+                placeholder="Senha"
+                required
+            >
+          </div>
+          <div class="form-actions">
+            <a href="/painel/login" class="botao">Voltar para login</a>
+            <button type="submit" class="botao">Cadastrar usuário</button>
+          </div>
+    </form>      
+</div>

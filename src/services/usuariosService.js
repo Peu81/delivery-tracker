@@ -1,4 +1,4 @@
-import { AppError } from "../utils/AppError";
+import { AppError } from "../utils/AppError.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

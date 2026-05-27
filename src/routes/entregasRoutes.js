@@ -57,7 +57,10 @@ apiMotoristasRouter.patch('/:id/inativar', (req, res, next) => apiMotoristaCtlr.
 apiUsuariosRouter.post('/registrar', (req, res, next) => apiUsuarioCtlr.criar(req, res, next));
 apiUsuariosRouter.post('/login', (req, res, next) => apiUsuarioCtlr.login(req, res, next));
 
-painelRouter.get('/', (req, res) => res.render('painel'));
+painelRouter.get('/', (req, res) => {res.redirect('/painel/login');});
+painelRouter.get('/login', (req, res) => {res.render('usuarios/login', { titulo: 'Login' });});
+painelRouter.get('/registrar', (req, res) => {res.render('usuarios/novo', { titulo: 'Registrar', usuario: {} });})
+painelRouter.get('/index', (req, res) => {res.render('painel', { titulo: 'Painel Principal' });});
 
 painelEntregasRouter.get('/', (req, res, next) => painelEntregaCtlr.index(req, res, next));
 painelEntregasRouter.get('/nova', (req, res, next) => painelEntregaCtlr.formularioVazio(req, res, next));
