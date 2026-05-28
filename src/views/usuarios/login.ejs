@@ -42,7 +42,7 @@
     try {
       const resposta = await axios.post('/api/auth/login', { email, senha });
       const token = resposta.data.accessToken;
-      localStorage.setItem('token', token);
+      localStorage.setItem('accessToken', token);
 
       setTimeout(() => { 
           window.location.href = '/painel'; 

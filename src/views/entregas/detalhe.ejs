@@ -16,12 +16,8 @@
             <input type="hidden" name="_method" value="PATCH">
             <button type="submit" class="botao botao-sucesso">Avançar status</button> 
         </form>
-
-        <form action="/painel/entregas/<%= entrega.id %>/cancelar" method="POST">
-            <input type="hidden" name="_method" value="PATCH">
-            <button type="submit" class="botao botao-erro">Cancelar entrega</button> 
-        </form>
-
+        <button type="button" class="botao botao-erro" onclick="cancelarEntrega('<%= entrega.id %>')">Cancelar entrega </button>
+        
         <form action="/painel/entregas/<%= entrega.id %>/atribuiMotorista" method="POST">
             <input type="hidden" name="_method" value="PATCH">
             <select name="motoristaId" required>
@@ -54,3 +50,46 @@
         <% } %>
     </section>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    async function cancelarEntrega(entregaId) {
+        const token = localStorage.getItem('accessToken'); 
+    
+        if (!token) {
+            alert('Você não está autenticado. Por favor, realize o login.');
+            window.location.href = '/painel/login';
+            return;
+        }
+    
+        if (!confirm('Tem certeza que deseja cancelar esta entrega?')) {
+            return;
+        }
+        try {
+            await axios.patch(`/painel/entregas/${entregaId}/cancelar`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            alert('Entrega cancelada com sucesso!');
+            window.location.reload();
+            
+        } catch (erro) {
+            if (erro.response) {
+                const status = erro.response.status;
+                if (status === 403) {
+                    alert('Acesso Negado: Apenas GESTORES podem cancelar entregas.');
+                } else if (status === 401) {
+                    alert('Sessão expirada. Faça login novamente.');
+                    window.location.href = '/painel/login';
+                } else {
+                    alert(`Erro: Falha ao cancelar a entrega.`);
+                }
+            } else {
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+    }
+    </script>
