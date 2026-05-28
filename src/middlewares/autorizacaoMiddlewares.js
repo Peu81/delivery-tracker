@@ -6,7 +6,7 @@ export const autorizar = (...papeisPermitidos) => (req, res, next) => {
   }
 
   if (!papeisPermitidos.includes(req.usuario.papel)) {
-    return next(new AppError(`Acesso negado.`, 403));
+    return next(new AppError(`Acesso negado`, 403));
   }
 
   next();

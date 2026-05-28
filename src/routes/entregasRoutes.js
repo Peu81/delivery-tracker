@@ -1,6 +1,7 @@
 import {raw, Router} from 'express';
 import { openDb } from '../config/dbInit.js';
 import { entregasDatabase } from "../database/entregasDatabase.js";
+import { autenticar } from '../middlewares/autenticacaoMiddlewares.js';
 import { autorizar } from '../middlewares/autorizacaoMiddlewares.js';
 import { entregasRepository } from "../repositories/entregasRepository.js";
 import { entregasService } from "../services/entregasService.js";
@@ -40,19 +41,19 @@ const apiUsuarioCtlr = new apiUsuariosController(usuarioService);
 const painelEntregaCtlr = new painelEntregasController(entregaService, motoristaService);
 const painelMotoristaCtlr = new painelMotoristasController(motoristaService);
 
-apiEntregasRouter.get('/', (req, res, next) => apiEntregaCtlr.listarTodos(req, res, next));
-apiEntregasRouter.get('/:id', (req, res, next) => apiEntregaCtlr.buscarPorId(req, res, next));
-apiEntregasRouter.get('/:id/historico', (req, res, next) => apiEntregaCtlr.historicoPorId(req, res, next));
-apiEntregasRouter.post('/', (req, res, next) => apiEntregaCtlr.criar(req, res, next));
-apiEntregasRouter.patch('/:id/avancar', (req, res, next) => apiEntregaCtlr.avancaStatus(req, res, next));
-apiEntregasRouter.patch('/:id/cancelar', autorizar('GESTOR'), (req, res, next) => apiEntregaCtlr.cancelar(req, res, next));
-apiEntregasRouter.patch('/:id/atribuir', (req, res, next) => apiEntregaCtlr.atribuiMotorista(req, res, next));
+apiEntregasRouter.get('/', autenticar, (req, res, next) => apiEntregaCtlr.listarTodos(req, res, next));
+apiEntregasRouter.get('/:id', autenticar, (req, res, next) => apiEntregaCtlr.buscarPorId(req, res, next));
+apiEntregasRouter.get('/:id/historico', autenticar, (req, res, next) => apiEntregaCtlr.historicoPorId(req, res, next));
+apiEntregasRouter.post('/', autenticar, (req, res, next) => apiEntregaCtlr.criar(req, res, next));
+apiEntregasRouter.patch('/:id/avancar', autenticar, (req, res, next) => apiEntregaCtlr.avancaStatus(req, res, next));
+apiEntregasRouter.patch('/:id/cancelar', autenticar, autorizar('GESTOR'), (req, res, next) => apiEntregaCtlr.cancelar(req, res, next));
+apiEntregasRouter.patch('/:id/atribuir', autenticar, (req, res, next) => apiEntregaCtlr.atribuiMotorista(req, res, next));
 
-apiMotoristasRouter.post('/', (req, res, next) => apiMotoristaCtlr.criar(req, res, next));
-apiMotoristasRouter.get('/', (req, res, next) => apiMotoristaCtlr.listarTodos(req, res, next));
-apiMotoristasRouter.get('/:id', (req, res, next) => apiMotoristaCtlr.buscarPorId(req, res, next));
-apiMotoristasRouter.get('/:id/entregas', (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
-apiMotoristasRouter.patch('/:id/inativar', autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
+apiMotoristasRouter.post('/', autenticar, (req, res, next) => apiMotoristaCtlr.criar(req, res, next));
+apiMotoristasRouter.get('/', autenticar, (req, res, next) => apiMotoristaCtlr.listarTodos(req, res, next));
+apiMotoristasRouter.get('/:id', autenticar, (req, res, next) => apiMotoristaCtlr.buscarPorId(req, res, next));
+apiMotoristasRouter.get('/:id/entregas', autenticar, (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
+apiMotoristasRouter.patch('/:id/inativar', autenticar, autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
 
 apiUsuariosRouter.post('/registrar', (req, res, next) => apiUsuarioCtlr.criar(req, res, next));
 apiUsuariosRouter.post('/login', (req, res, next) => apiUsuarioCtlr.login(req, res, next));
@@ -66,7 +67,7 @@ painelEntregasRouter.get('/nova', (req, res, next) => painelEntregaCtlr.formular
 painelEntregasRouter.post('/', (req, res, next) => painelEntregaCtlr.nova(req, res, next));
 painelEntregasRouter.get('/:id', (req, res, next) => painelEntregaCtlr.detalhe(req, res, next));
 painelEntregasRouter.patch('/:id/avancar', (req, res, next) => painelEntregaCtlr.avancarStatus(req, res, next));
-painelEntregasRouter.patch('/:id/cancelar', (req, res, next) => painelEntregaCtlr.cancelar(req, res, next));
+painelEntregasRouter.patch('/:id/cancelar', autenticar, autorizar('GESTOR'), (req, res, next) => painelEntregaCtlr.cancelar(req, res, next));
 painelEntregasRouter.patch('/:id/atribuiMotorista', (req, res, next) => painelEntregaCtlr.atribuiMotorista(req, res, next));
 
 

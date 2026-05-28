@@ -20,7 +20,7 @@ export class usuariosService {
         const informacoesUsuario = {
             ...dados,
             senha: senhaHash,
-            papel: "OPERADOR"
+            papel: 'OPERADOR'
         }
 
         return this.repository.criar(informacoesUsuario);

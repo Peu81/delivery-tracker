@@ -5,7 +5,7 @@ export const autenticar = (req, res, next) => {
   const authHeader = req.headers['authorization'];
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return next(new AppError('Token de acesso não fornecido', 401));
+    return next(new AppError('Token não fornecido', 401));
   }
 
   const token = authHeader.split(' ')[1];
@@ -13,6 +13,7 @@ export const autenticar = (req, res, next) => {
   try {
     const payload  = verificarAccessToken(token);
     req.usuario    = payload;
+    console.log("DADOS DO TOKEN:", req.usuario);
     next();
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
