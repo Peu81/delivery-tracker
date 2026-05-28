@@ -1,7 +1,7 @@
 <main>
     <div class="formulario">
         <h1>Login</h1>
-        <form id="form-registro">
+        <form id="form-login">
             <div class="form-group">
               <label for="email">Email</label>
               <input
@@ -31,3 +31,29 @@
         </form>      
     </div>
 </main>
+
+<script>
+  document.getElementById('form-login').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
+
+    try {
+      const resposta = await axios.post('/api/auth/login', { email, senha });
+      const token = resposta.data.accessToken;
+      localStorage.setItem('token', token);
+
+      setTimeout(() => { 
+          window.location.href = '/painel'; 
+      }, 1000);
+      
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert( "Credenciais inválidas!");
+      } else {
+        alert("Erro ao tentar fazer login. Tente novamente.");
+      }
+    }
+  });
+</script>

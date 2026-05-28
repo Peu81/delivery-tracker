@@ -1,7 +1,7 @@
 import {raw, Router} from 'express';
 import { openDb } from '../config/dbInit.js';
 import { entregasDatabase } from "../database/entregasDatabase.js";
-import { autorizar } from '../middlewares/autorizar.js';
+import { autorizar } from '../middlewares/autorizacaoMiddlewares.js';
 import { entregasRepository } from "../repositories/entregasRepository.js";
 import { entregasService } from "../services/entregasService.js";
 import { entregasController as apiEntregasController} from "../controllers/api/entregasController.js";
@@ -57,10 +57,9 @@ apiMotoristasRouter.patch('/:id/inativar', autorizar('GESTOR'), (req, res, next)
 apiUsuariosRouter.post('/registrar', (req, res, next) => apiUsuarioCtlr.criar(req, res, next));
 apiUsuariosRouter.post('/login', (req, res, next) => apiUsuarioCtlr.login(req, res, next));
 
-painelRouter.get('/', (req, res) => {res.redirect('/painel/login');});
+painelRouter.get('/', (req, res) => {res.render('index', {titulo: 'Painel Principal'});});
 painelRouter.get('/login', (req, res) => {res.render('usuarios/login', { titulo: 'Login' });});
 painelRouter.get('/registrar', (req, res) => {res.render('usuarios/novo', { titulo: 'Registrar', usuario: {} });})
-painelRouter.get('/index', (req, res) => {res.render('painel', { titulo: 'Painel Principal' });});
 
 painelEntregasRouter.get('/', (req, res, next) => painelEntregaCtlr.index(req, res, next));
 painelEntregasRouter.get('/nova', (req, res, next) => painelEntregaCtlr.formularioVazio(req, res, next));

@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import 'dotenv/config';
 import methodOverride from 'method-override';
 import { apiEntregasRouter, apiMotoristasRouter, apiUsuariosRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter } from './routes/entregasRoutes.js';
 import { middlewareDeErros } from './middlewares/errosMiddlewares.js';

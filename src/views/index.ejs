@@ -17,3 +17,31 @@
         </li>
     </ul>
 </main>
+
+<script>
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/painel/login';
+    }
+
+    axios.interceptors.request.use(config => {
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    }, error => {
+        return Promise.reject(error);
+    });
+
+    axios.interceptors.response.use(response => {
+        return response;
+    }, error => {
+        if (error.response && error.response.status === 401) {
+            alert("Sua sessão expirou. Faça o login novamente para continuar.");
+            localStorage.removeItem('token');
+            window.location.href = '/painel/login';
+        }
+        return Promise.reject(error);
+    });
+</script>

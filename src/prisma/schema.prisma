@@ -65,4 +65,5 @@ model Usuario {
   email String @unique
   senha String
   papel papeis @default(OPERADOR)
+  entregas   Entrega[]
 }
