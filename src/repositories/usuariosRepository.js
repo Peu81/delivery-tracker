@@ -24,6 +24,6 @@ export class usuariosRepository {
     }
 
     async buscarPorEmail(email) {
-        return await this.prisma.usuario.findUnique({where: {email: email}})
+        return await this.prisma.usuario.findUnique({where: {email}})
     }
 }
