@@ -30,9 +30,9 @@ export class motoristasController {
         }
     }
 
-    async inativaMotorista(req, res, next) {
+    async atualizaStatus(req, res, next) {
         try {
-            const motorista = await this.service.inativaMotorista(Number(req.params.id));
+            const motorista = await this.service.atualizaStatus(Number(req.params.id));
             res.status(200).json(motorista);
         } catch (error) {
             next(error);

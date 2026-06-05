@@ -36,14 +36,14 @@ export class motoristasService {
         return motorista;
     }
 
-    async inativaMotorista(id) {
+    async atualizaStatus(id) {
         const motorista = await this.repository.buscarPorId(id);
 
         if (!motorista) {
             throw new AppError("Motorista não encontrado.", 404)           
         }
 
-        motorista.status = "INATIVO"
+        motorista.status = motorista.status === 'ATIVO' ? 'INATIVO' : 'ATIVO';
 
         return this.repository.atualizar(id, motorista);
     }

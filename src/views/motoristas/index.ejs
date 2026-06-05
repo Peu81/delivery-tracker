@@ -5,7 +5,7 @@
     <% } else { %>
         <table class="tabela">
             <thead>
-                <tr><th>Nome</th><th>CPF</th><th>Placa</th><th>Status</th></tr>
+                <tr><th>Nome</th><th>CPF</th><th>Placa</th><th>Status</th><th>Ações</th></tr>
             </thead>
 
             <tbody>
@@ -15,9 +15,62 @@
                         <td><%= m.cpf %></td>
                         <td><%= m.placaVeiculo %></td>
                         <td><%= m.status %></td>
+                        <td>
+                            <button class="botao-status" onclick="inativaMotorista('<%= m.id %>', '<%= m.status %>')">
+                                Desativar/Ativar
+                            </button>
+                        </td>
                     </tr>
                <% }); %>
             </tbody>
         </table>
     <% } %>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    async function inativaMotorista(motoristaId, statusAtual) {
+        const token = localStorage.getItem('accessToken'); 
+    
+        const estaAtivo = statusAtual === 'ATIVO';
+        const msgConfirmacao = estaAtivo ? 'Deseja desativar este motorista?' : 'Deseja ativar este motorista?';
+        const msgSucesso = estaAtivo ? 'Motorista desativado com sucesso!' : 'Motorista ativado com sucesso!';
+        const verboErro = estaAtivo ? 'desativar' : 'ativar';
+
+        if (!token) {
+            alert('Você não está autenticado. Por favor, realize o login.');
+            window.location.href = '/painel/login';
+            return;
+        }
+    
+        if (!confirm(msgConfirmacao)) {
+            return;
+        }
+        try {
+            await axios.patch(`/api/motoristas/${motoristaId}/inativar`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            alert(msgSucesso);
+            window.location.reload();
+            
+        } catch (erro) {
+            if (erro.response) {
+                const status = erro.response.status;
+                if (status === 403) {
+                    alert(`Acesso Negado: Apenas GESTORES podem ${verboErro} motoristas.`);
+                } else if (status === 401) {
+                    alert('Sessão expirada. Faça login novamente.');
+                    window.location.href = '/painel/login';
+                } else {
+                    alert(`Erro: Falha ao desativar motorista.`);
+                }
+            } else {
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+    }
+</script>

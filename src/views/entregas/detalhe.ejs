@@ -67,7 +67,7 @@
             return;
         }
         try {
-            await axios.patch(`/painel/entregas/${entregaId}/cancelar`, {}, {
+            await axios.patch(`/api/entregas/${entregaId}/cancelar`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

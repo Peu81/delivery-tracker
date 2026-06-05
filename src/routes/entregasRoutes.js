@@ -53,7 +53,7 @@ apiMotoristasRouter.post('/', autenticar, (req, res, next) => apiMotoristaCtlr.c
 apiMotoristasRouter.get('/', autenticar, (req, res, next) => apiMotoristaCtlr.listarTodos(req, res, next));
 apiMotoristasRouter.get('/:id', autenticar, (req, res, next) => apiMotoristaCtlr.buscarPorId(req, res, next));
 apiMotoristasRouter.get('/:id/entregas', autenticar, (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
-apiMotoristasRouter.patch('/:id/inativar', autenticar, autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.inativaMotorista(req, res, next))
+apiMotoristasRouter.patch('/:id/inativar', autenticar, autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.atualizaStatus(req, res, next))
 
 apiUsuariosRouter.post('/registrar', (req, res, next) => apiUsuarioCtlr.criar(req, res, next));
 apiUsuariosRouter.post('/login', (req, res, next) => apiUsuarioCtlr.login(req, res, next));
