@@ -28,7 +28,7 @@
                         <td><%= e.origem %></td>
                         <td><%= e.destino %></td>
                         <td><span class="badge badge-<%= e.status.toLowerCase() %>"><%= e.status %></span></td>
-                        <td><%= e.fk_id_motorista ? e.fk_id_motorista : 'Não atribuído' %></td>
+                        <td><%= e.motorista && e.motorista.nome ? e.motorista.nome : 'Não atribuído' %></td>
                         <td><%= new Date(e.createdAt).toLocaleDateString('pt-BR') %></td>
                         <td><a href="/painel/entregas/<%= e.id %>" class="botao pequeno">Detalhes</a></td>
                     </tr>

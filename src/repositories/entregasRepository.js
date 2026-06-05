@@ -37,7 +37,8 @@ export class entregasRepository {
                 where: where, 
                 skip: skip, 
                 take: limit, 
-                orderBy: {id: 'asc'}
+                orderBy: {id: 'asc'},
+                include: {motorista: true}
             }),
             this.prisma.entrega.count({where})]
         );
