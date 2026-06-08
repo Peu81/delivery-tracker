@@ -14,7 +14,7 @@ export class entregasController {
 
     async index(req, res, next) {
         try {
-            const resultado = await this.service.listarTodos(req.query.page, req.query.status);
+            const resultado = await this.service.listarTodos(req.query);
 
             console.log("RETORNO DO SERVICE:", resultado);
             
@@ -27,7 +27,8 @@ export class entregasController {
                 entregas: listaEntregas, 
                 paginaAtual: resultado.page, 
                 totalPaginas: resultado.totalPaginas, 
-                flash
+                flash,
+                query: req.query
             });
         } catch (error) {next(error)};
     }

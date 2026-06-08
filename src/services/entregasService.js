@@ -12,11 +12,7 @@ export class entregasService {
         this.motoristasRepository = motoristasRepository;
     }
 
-    async listarTodos(page = 1, status = null) {
-        const filtros = {
-            page: page,
-            status: status
-        }
+    async listarTodos(filtros = {}) {
         return this.repository.listarTodos(filtros);
     }
     

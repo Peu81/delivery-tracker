@@ -3,11 +3,11 @@
     <form action="/painel/entregas" method="GET" class="filtro-form">
         <label for="status">Filtro por Status:</label>
         <select name="status" id="status">
-            <option value="">Todos</option>
-            <option value="CRIADA">Criada</option>
-            <option value="EM_TRANSITO">Em trânsito</option>
-            <option value="ENTREGUE">Entregue</option>
-            <option value="CANCELADA">Cancelada</option>
+            <option value="" <%= (!query.status) ? 'selected' : '' %>>Todos</option>
+            <option value="CRIADA" <%= query.status === 'CRIADA' ? 'selected' : '' %>>Criada</option>
+            <option value="EM_TRANSITO" <%= query.status === 'EM_TRANSITO' ? 'selected' : '' %>>Em trânsito</option>
+            <option value="ENTREGUE" <%= query.status === 'ENTREGUE' ? 'selected' : '' %>>Entregue</option>
+            <option value="CANCELADA" <%= query.status === 'CANCELADA' ? 'selected' : '' %>>Cancelada</option>
         </select>
         <button type="submit" class="botao">Filtrar</button>
     </form>
@@ -35,5 +35,40 @@
                <% }); %>
             </tbody>
         </table>
+
+        <% if (typeof totalPaginas !== 'undefined' && totalPaginas > 1) { %>
+            <% const urlParams = new URLSearchParams(query);
+            const buildUrl = (pageNum) => {
+                urlParams.set('page', pageNum);
+                return '?' + urlParams.toString();
+            }; %>
+
+            <div class="paginacao-container">
+                <ul class="pagination">
+                    <li>
+                        <a href="<%= buildUrl(paginaAtual - 1) %>" 
+                           class="botao <%= paginaAtual === 1 ? 'disabled' : '' %>">
+                            Anterior
+                        </a>
+                    </li>
+            
+                    <% for (let i = 1; i <= totalPaginas; i++) { %>
+                        <li>
+                            <a href="<%= buildUrl(i) %>" 
+                               class="botao <%= paginaAtual === i ? 'ativo' : '' %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                    <% } %>
+            
+                    <li>
+                        <a href="<%= buildUrl(paginaAtual + 1) %>" 
+                           class="botao pequeno <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
+                            Próxima &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        <% } %>
     <% } %>
 </main>
