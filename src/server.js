@@ -2,13 +2,12 @@ import express from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
 import methodOverride from 'method-override';
-import { apiEntregasRouter, apiMotoristasRouter, apiUsuariosRouter, painelEntregasRouter, painelMotoristasRouter, painelRouter } from './routes/entregasRoutes.js';
 import { middlewareDeErros } from './middlewares/errosMiddlewares.js';
 import { fileURLToPath } from 'url';
 import { dirname, join }  from 'path';
 import expressLayouts from 'express-ejs-layouts';
+import routes from './routes/index.js';
 import { autenticar } from './middlewares/autenticacaoMiddlewares.js';
-
 
 const app = express();
 
@@ -36,15 +35,13 @@ app.use(methodOverride(function (req, res){
 
 app.use(morgan(":method :url :status Body: :body "));
 
-app.use('/api/entregas', autenticar, apiEntregasRouter);
-app.use('/api/motoristas', autenticar, apiMotoristasRouter);
-app.use('/api/auth', apiUsuariosRouter);
-app.use('/painel', painelRouter);
-app.use('/painel/entregas', painelEntregasRouter);
-app.use('/painel/motoristas', painelMotoristasRouter);
+
+app.use(routes);
 app.use(middlewareDeErros);
 
-const porta = 3000;
-app.listen(porta);
+const porta = process.env.PORT || 3000;
+app.listen(porta, () => {
+    console.log(`Servidor rodando na porta ${porta}`);
+});
 
 export default app;
