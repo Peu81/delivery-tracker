@@ -20,6 +20,9 @@
                                 Desativar/Ativar
                             </button>
                         </td>
+                        <td>
+                            <a class="btn-secundario" href="/painel/motoristas/<%= m.id %>/entregas">Visualizar entregas</a>
+                        </td>
                     </tr>
                <% }); %>
             </tbody>
@@ -72,5 +75,11 @@
                 alert('Erro de conexão com o servidor.');
             }
         }
+    }
+</script>
+
+<script>
+    if (!localStorage.getItem('accessToken')) {
+        window.location.href = '/painel/login';
     }
 </script>
