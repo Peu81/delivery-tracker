@@ -72,3 +72,9 @@
         <% } %>
     <% } %>
 </main>
+
+<script>
+    if (!localStorage.getItem('accessToken')) {
+        window.location.href = '/painel/login';
+    }
+</script>

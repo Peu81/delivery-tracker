@@ -1,23 +1,25 @@
-<main>
-    <ul class="painel-menu">
-        <li class="painel-entrega">
-            <a href="/painel/entregas" class="nav-link">Entregas</a>
-        </li>
-    
-        <li class="painel-motorista">
-            <a href="/painel/motoristas" class="nav-link">Motoristas</a>
-        </li>
-    
-        <li class="painel-entrega">
-            <a href="/painel/entregas/nova" class="nav-link">Nova entrega</a>
-        </li>
-    
-        <li class="painel-motorista">
-            <a href="/painel/motoristas/novo" class="nav-link">Novo motorista</a>
-        </li>
-    </ul>
-    <a class="button" href="/painel/login">Sair da Conta</a>
-</main>
+<body>
+    <main>
+        <ul class="painel-menu">
+            <li class="painel-entrega" >
+                <a href="/painel/entregas" class="nav-link">Entregas</a>
+            </li>
+        
+            <li class="painel-motorista" >
+                <a href="/painel/motoristas" class="nav-link">Motoristas</a>
+            </li>
+        
+            <li class="painel-nova-entrega">
+                <a href="/painel/entregas/nova" class="nav-link">Nova entrega</a>
+            </li>
+        
+            <li class="painel-novo-motorista" id="menu-novo-motorista">
+                <a href="/painel/motoristas/novo" class="nav-link">Novo motorista</a>
+            </li>
+        </ul>
+        <a class="botao-logout" href="/painel/login">Sair da Conta</a>
+    </main>    
+</body>
 
 <script>
     const token = localStorage.getItem('accessToken');
@@ -46,3 +48,39 @@
         return Promise.reject(error);
     });
 </script>
+
+<script>
+    // Função para ler os dados de dentro do Token JWT
+    function obterUsuarioLogado() {
+        if (!token) return null;
+
+        try {
+            // Pega a parte do meio do token (Payload) e decodifica do Base64
+            const payloadBase64 = token.split('.')[2];
+            const decodedJson = atob(payloadBase64);
+            return JSON.parse(decodedJson); // Retorna um objeto com { id, nome, email, papel }
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const usuario = obterUsuarioLogado();
+
+    // Se o usuário for OPERADOR, escondemos os botões restritos da tela
+    if (usuario && usuario.papel === 'OPERADOR') {
+        const menuMotorista = document.getElementById('menu-novo-motorista');
+        
+        // Esconde o menu de Novo Motorista (Restrito pelo RF-03)
+        if (menuMotorista) menuMotorista.style.display = 'none';
+        
+        // Opcional: Se você realmente quiser barrar a Nova Entrega contrariando a regra padrão, descomente a linha abaixo:
+        // const menuEntrega = document.getElementById('menu-nova-entrega');
+        // if (menuEntrega) menuEntrega.style.display = 'none';
+    }
+</script>
+
+<script>
+    if (!localStorage.getItem('accessToken')) {
+        window.location.href = '/painel/login';
+    }
+  </script>

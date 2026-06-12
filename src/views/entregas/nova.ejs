@@ -47,3 +47,10 @@
     </div>
   </form>
 </div>
+
+
+<script>
+  if (!localStorage.getItem('accessToken')) {
+      window.location.href = '/painel/login';
+  }
+</script>

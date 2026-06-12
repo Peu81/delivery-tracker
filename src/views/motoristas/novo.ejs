@@ -48,3 +48,24 @@
     </div>
   </form>
 </div>
+
+<script>
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+      window.location.href = '/painel/login';
+  } else {
+      try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+
+          if (payload.papel === 'OPERADOR') {
+              alert('Acesso Negado: Apenas GESTORES podem cadastrar motoristas.');
+              window.location.href = '/painel';
+          }
+      } catch (error) {
+          console.error('Erro ao decodificar token', error);
+          localStorage.removeItem('accessToken');
+          window.location.href = '/painel/login';
+      }
+  }
+</script>

@@ -20,10 +20,10 @@ const entregaService = new entregasService(entregaRepo, motoristaRepo);
 const apiEntregaCtlr = new apiEntregasController(entregaService);
 
 
-router.post('/', autenticar, (req, res, next) => apiMotoristaCtlr.criar(req, res, next));
+router.post('/', autenticar, autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.criar(req, res, next));
 router.get('/', autenticar, (req, res, next) => apiMotoristaCtlr.listarTodos(req, res, next));
 router.get('/:id', autenticar, (req, res, next) => apiMotoristaCtlr.buscarPorId(req, res, next));
-router.get('/:id/entregas', autenticar, (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
+router.get('/:id/entregas', autenticar, autorizar('GESTOR'), (req, res, next) => apiEntregaCtlr.listaEntregaPorMotorista(req, res, next));
 router.patch('/:id/inativar', autenticar, autorizar('GESTOR'), (req, res, next) => apiMotoristaCtlr.atualizaStatus(req, res, next))
 
 export default router;

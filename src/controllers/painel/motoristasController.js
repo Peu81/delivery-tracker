@@ -26,7 +26,7 @@ export class motoristasController {
 
     async novo(req, res, next) {
         try {
-            await this.entregasService.criar(req.body);
+            await this.motoristasService.criar(req.body);
             res.redirect('/painel/motoristas?sucesso=MotoristaCadastrado.')
         } catch (error) {
             res.render('motoristas/novo', {
