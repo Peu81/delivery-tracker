@@ -1,77 +1,79 @@
-<main class="container">
-    <a href="/painel" class="botao">Voltar ao menu principal</a>
-    <form action="/painel/entregas" method="GET" class="filtro-form">
-        <label for="status">Filtro por Status:</label>
-        <select name="status" id="status">
-            <option value="" <%= (!query.status) ? 'selected' : '' %>>Todos</option>
-            <option value="CRIADA" <%= query.status === 'CRIADA' ? 'selected' : '' %>>Criada</option>
-            <option value="EM_TRANSITO" <%= query.status === 'EM_TRANSITO' ? 'selected' : '' %>>Em trânsito</option>
-            <option value="ENTREGUE" <%= query.status === 'ENTREGUE' ? 'selected' : '' %>>Entregue</option>
-            <option value="CANCELADA" <%= query.status === 'CANCELADA' ? 'selected' : '' %>>Cancelada</option>
-        </select>
-        <button type="submit" class="botao">Filtrar</button>
-    </form>
+<body class="tela-login">
+    <main class="container">
+        <a href="/painel" class="btn btn-secundario">Voltar ao menu principal</a>
+        <form action="/painel/entregas" method="GET" class="filtro-form">
+            <label for="status">Filtro por Status:</label>
+            <select name="status" id="status">
+                <option value="" <%= (!query.status) ? 'selected' : '' %>>Todos</option>
+                <option value="CRIADA" <%= query.status === 'CRIADA' ? 'selected' : '' %>>Criada</option>
+                <option value="EM_TRANSITO" <%= query.status === 'EM_TRANSITO' ? 'selected' : '' %>>Em trânsito</option>
+                <option value="ENTREGUE" <%= query.status === 'ENTREGUE' ? 'selected' : '' %>>Entregue</option>
+                <option value="CANCELADA" <%= query.status === 'CANCELADA' ? 'selected' : '' %>>Cancelada</option>
+            </select>
+            <button type="submit" class="botao">Filtrar</button>
+        </form>
 
 
-    <% if (typeof entregas === 'undefined' || entregas.length === 0) { %>
-        <p class="vazio">Não há entregas cadastradas.</p>
-    <% } else { %>
-        <table class="tabela">
-            <thead>
-                <tr><th>Descrição</th><th>Origem</th><th>Destino</th><th>Status</th><th>Motorista</th><th>Data</th><th>Ações</th></tr>
-            </thead>
+        <% if (typeof entregas === 'undefined' || entregas.length === 0) { %>
+            <p class="vazio">Não há entregas cadastradas.</p>
+        <% } else { %>
+            <table class="tabela">
+                <thead>
+                    <tr><th>Descrição</th><th>Origem</th><th>Destino</th><th>Status</th><th>Motorista</th><th>Data</th><th>Ações</th></tr>
+                </thead>
 
-            <tbody>
-                <% entregas.forEach(e => { %>
-                    <tr>
-                        <td><%= e.descricao %></td>
-                        <td><%= e.origem %></td>
-                        <td><%= e.destino %></td>
-                        <td><span class="badge badge-<%= e.status.toLowerCase() %>"><%= e.status %></span></td>
-                        <td><%= e.motorista && e.motorista.nome ? e.motorista.nome : 'Não atribuído' %></td>
-                        <td><%= new Date(e.createdAt).toLocaleDateString('pt-BR') %></td>
-                        <td><a href="/painel/entregas/<%= e.id %>" class="botao pequeno">Detalhes</a></td>
-                    </tr>
-               <% }); %>
-            </tbody>
-        </table>
+                <tbody>
+                    <% entregas.forEach(e => { %>
+                        <tr>
+                            <td><%= e.descricao %></td>
+                            <td><%= e.origem %></td>
+                            <td><%= e.destino %></td>
+                            <td><span class="badge badge-<%= e.status.toLowerCase() %>"><%= e.status %></span></td>
+                            <td><%= e.motorista && e.motorista.nome ? e.motorista.nome : 'Não atribuído' %></td>
+                            <td><%= new Date(e.createdAt).toLocaleDateString('pt-BR') %></td>
+                            <td><a href="/painel/entregas/<%= e.id %>" class="botao pequeno">Detalhes</a></td>
+                        </tr>
+                <% }); %>
+                </tbody>
+            </table>
 
-        <% if (typeof totalPaginas !== 'undefined' && totalPaginas > 1) { %>
-            <% const urlParams = new URLSearchParams(query);
-            const buildUrl = (pageNum) => {
-                urlParams.set('page', pageNum);
-                return '?' + urlParams.toString();
-            }; %>
+            <% if (typeof totalPaginas !== 'undefined' && totalPaginas > 1) { %>
+                <% const urlParams = new URLSearchParams(query);
+                const buildUrl = (pageNum) => {
+                    urlParams.set('page', pageNum);
+                    return '?' + urlParams.toString();
+                }; %>
 
-            <div class="paginacao-container">
-                <ul class="pagination">
-                    <li>
-                        <a href="<%= buildUrl(paginaAtual - 1) %>" 
-                           class="botao <%= paginaAtual === 1 ? 'disabled' : '' %>">
-                            Anterior
-                        </a>
-                    </li>
-            
-                    <% for (let i = 1; i <= totalPaginas; i++) { %>
+                <div class="paginacao-container">
+                    <ul class="pagination">
                         <li>
-                            <a href="<%= buildUrl(i) %>" 
-                               class="botao <%= paginaAtual === i ? 'ativo' : '' %>">
-                                <%= i %>
+                            <a href="<%= buildUrl(paginaAtual - 1) %>" 
+                            class="botao <%= paginaAtual === 1 ? 'disabled' : '' %>">
+                                Anterior
                             </a>
                         </li>
-                    <% } %>
-            
-                    <li>
-                        <a href="<%= buildUrl(paginaAtual + 1) %>" 
-                           class="botao pequeno <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
-                            Próxima &raquo;
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                
+                        <% for (let i = 1; i <= totalPaginas; i++) { %>
+                            <li>
+                                <a href="<%= buildUrl(i) %>" 
+                                class="botao <%= paginaAtual === i ? 'ativo' : '' %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+                
+                        <li>
+                            <a href="<%= buildUrl(paginaAtual + 1) %>" 
+                            class="botao pequeno <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
+                                Próxima &raquo;
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            <% } %>
         <% } %>
-    <% } %>
-</main>
+    </main>
+</body>
 
 <script>
     if (!localStorage.getItem('accessToken')) {

@@ -1,34 +1,32 @@
-<main class="container">
-    <a href="/painel" class="botao">Voltar ao menu principal</a>
-    <% if (typeof motoristas === 'undefined' || motoristas.length === 0) { %>
-    <p class="vazio">Não há motoristas cadastrados.</p>
-    <% } else { %>
-        <table class="tabela">
-            <thead>
-                <tr><th>Nome</th><th>CPF</th><th>Placa</th><th>Status</th><th>Ações</th></tr>
-            </thead>
+<body class="tela-login">
+    <main class="container">
+        <a href="/painel" class="btn btn-secundario">Voltar ao menu principal</a>
+        <% if (typeof motoristas === 'undefined' || motoristas.length === 0) { %>
+        <p class="vazio">Não há motoristas cadastrados.</p>
+        <% } else { %>
+            <table class="tabela">
+                <thead>
+                    <tr><th>Nome</th><th>CPF</th><th>Placa</th><th>Status</th><th>Ações</th></tr>
+                </thead>
 
-            <tbody>
-                <% motoristas.forEach(m => { %>
-                    <tr>
-                        <td><%= m.nome %></td>
-                        <td><%= m.cpf %></td>
-                        <td><%= m.placaVeiculo %></td>
-                        <td><%= m.status %></td>
-                        <td>
-                            <button class="botao-status" onclick="inativaMotorista('<%= m.id %>', '<%= m.status %>')">
-                                Desativar/Ativar
-                            </button>
-                        </td>
-                        <td>
-                            <a class="btn-secundario" href="/painel/motoristas/<%= m.id %>/entregas">Visualizar entregas</a>
-                        </td>
-                    </tr>
-               <% }); %>
-            </tbody>
-        </table>
-    <% } %>
-</main>
+                <tbody>
+                    <% motoristas.forEach(m => { %>
+                        <tr>
+                            <td><%= m.nome %></td>
+                            <td><%= m.cpf %></td>
+                            <td><%= m.placaVeiculo %></td>
+                            <td><%= m.status %></td>
+                            <td class="celula-acoes">
+                                <button type="submit" class="btn btn-secundario btn-pequeno" onclick="inativaMotorista('<%= m.id %>', '<%= m.status %>')">Desativar/Ativar</button>
+                                <a class="btn btn-primario btn-pequeno" href="/painel/motoristas/<%= m.id %>/entregas">Visualizar entregas</a>
+                            </td>
+                        </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </main>
+</body>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 

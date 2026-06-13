@@ -181,3 +181,135 @@ a {
     transform: translateY(-2px);
     box-shadow: 0px 6px 12px rgba(28, 31, 199, 0.3);
 }
+
+.container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 1200px;
+    margin: 100px auto 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.filtro-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.filtro-form label {
+    font-weight: bold;
+    color: #4b0082;
+}
+
+.filtro-form select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.filtro-form select:focus {
+    border-color: #9a5fce;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabela th {
+    background-color: #9a5fce;
+    color: #ffffff;
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.tabela th:first-child { 
+    border-top-left-radius: 8px; }
+
+.tabela th:last-child { 
+    text-align: center;
+    padding-right: 15px;
+}
+
+.tabela td {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    color: #333;
+    vertical-align: middle;
+}
+
+.tabela tbody tr:hover {
+    background-color: #f1e9f7;
+    transition: background-color 0.2s ease;
+}
+
+.paginacao-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;  
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 5px;
+}
+
+.pagination a.botao {
+    padding: 8px 14px;
+    min-width: auto;
+    font-size: 0.9rem;
+    background-color: #f8f9fa;
+    color: #4b0082;
+    border: 1px solid #dee2e6;
+}
+
+.pagination a.botao:hover {
+    background-color: #e9ecef;
+}
+
+.pagination a.botao.ativo {
+    background-color: #9a5fce;
+    color: #ffffff;
+    border-color: #9a5fce;
+}
+
+.pagination a.botao.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.container > .btn-secundario {
+    width: fit-content;
+}
+
+.celula-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    padding: 15px;
+    border-bottom: none;
+}
+
+.btn-pequeno {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
