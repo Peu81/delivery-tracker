@@ -49,15 +49,14 @@
 </script>
 
 <script>
-    // Função para ler os dados de dentro do Token JWT
     function obterUsuarioLogado() {
         if (!token) return null;
 
         try {
-            // Pega a parte do meio do token (Payload) e decodifica do Base64
+
             const payloadBase64 = token.split('.')[2];
             const decodedJson = atob(payloadBase64);
-            return JSON.parse(decodedJson); // Retorna um objeto com { id, nome, email, papel }
+            return JSON.parse(decodedJson);
         } catch (e) {
             return null;
         }
@@ -65,16 +64,10 @@
 
     const usuario = obterUsuarioLogado();
 
-    // Se o usuário for OPERADOR, escondemos os botões restritos da tela
     if (usuario && usuario.papel === 'OPERADOR') {
         const menuMotorista = document.getElementById('menu-novo-motorista');
         
-        // Esconde o menu de Novo Motorista (Restrito pelo RF-03)
         if (menuMotorista) menuMotorista.style.display = 'none';
-        
-        // Opcional: Se você realmente quiser barrar a Nova Entrega contrariando a regra padrão, descomente a linha abaixo:
-        // const menuEntrega = document.getElementById('menu-nova-entrega');
-        // if (menuEntrega) menuEntrega.style.display = 'none';
     }
 </script>
 
@@ -82,4 +75,4 @@
     if (!localStorage.getItem('accessToken')) {
         window.location.href = '/painel/login';
     }
-  </script>
+</script>

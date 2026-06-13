@@ -17,8 +17,110 @@ a {
     text-decoration: none;
 }
 
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f1e9f7;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.cabecalho h1 {
+    color: #4b0082;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.cabecalho .btn, .acoes .btn {
+    width: auto;
+    white-space: nowrap;
+}
+
+.lista-entregas p {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.lista-entregas p strong {
+    color: #4b0082;
+}
+
+.acoes {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #f1e9f7;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.acoes form {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.acoes select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+}
+
+.acoes select:focus {
+    border-color: #9a5fce;
+}
+
+.btn-perigo {
+    background-color: #c82333;
+    color: #ffffff;
+    box-shadow: 0px 6px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-perigo:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(220, 53, 69, 0.3);  
+}
+
+.historico {
+    margin-top: 30px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.historico h2 {
+    color: #4b0082;
+    margin-top: 0;
+    font-size: 1.4rem;
+}
+
+.historico ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.historico li {
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.historico li:last-child {
+    border-bottom: none;
+}
+
 .navbar {
-    position: absolute;
+    position: fixed;
+    z-index: 1000;
     top: 0;
     left: 0;
     width: 100%;
@@ -42,6 +144,16 @@ a {
     height: 100vh;           
     margin: 0;
     position: relative;
+    background-image: linear-gradient(to right, #cdb8e0, #7520c5);
+}
+
+
+.tela-sistema {
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     background-image: linear-gradient(to right, #cdb8e0, #7520c5);
 }
 
@@ -186,7 +298,7 @@ a {
     background-color: #ffffff;
     width: 90%;
     max-width: 1200px;
-    margin: 100px auto 40px auto;
+    margin: 40px auto 40px auto;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
