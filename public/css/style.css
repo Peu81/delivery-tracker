@@ -23,6 +23,7 @@ a {
     left: 0;
     width: 100%;
     padding: 5px 20px; 
+    display: flex;
     box-sizing: border-box;
     font-size: 1.2rem;
     font-family: Arial, Helvetica, sans-serif;
@@ -30,6 +31,8 @@ a {
     color: #9a5fce;
     background-color: #ffffff;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.438);
+    justify-content: space-between;
+    align-items: center;
 }
 
 .tela-login {
@@ -52,9 +55,46 @@ a {
     background-image: linear-gradient(to right, #cdb8e0, #7520c5);
 }
 
+.painel-menu {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 120px;
+    flex-wrap: wrap;
+    background-image: linear-gradient(to right, #cdb8e0, #7520c5);
+}
+
+.painel-menu li {
+    width: 260px;
+    height: 260px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.painel-menu li:hover {
+    transform: translateY(-8px); 
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.18); 
+    cursor: pointer;
+}
+
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;          
+    text-decoration: none; 
+    color: #4b0082;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 16px;
+}
+
 .titulo {
-    position: absolute;
-    top: 180px;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     color: #9a5fce;
@@ -66,10 +106,19 @@ a {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 320px;
-    height: 300px;
+    width: 400px;
+    height: auto;
+    padding: 40px;
+    box-sizing: border-box;
     background-color: #ffffff;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.822);
+}
+
+.formulario h1, 
+.formulario h2 {
+    margin-top: 0;         /* Tira margens indesejadas do topo */
+    margin-bottom: 25px;   /* Dá um espaço limpo entre o título e o primeiro input */
+    text-align: center;
 }
 
 .form-group {
@@ -81,9 +130,10 @@ a {
 
 .form-acoes {
     display: flex;
-    justify-content: center; 
-    gap: 20px;               
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: center; 
+    gap: 15px;               
+    margin-top: 25px;
     width: 100%;
 }
 
@@ -99,16 +149,18 @@ a {
     cursor: pointer;            
     transition: all 0.3s ease;  
     font-family: inherit;        
-    width: 130px;            
+    width: 100%;            
     display: flex;           
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
 }
 
 
 .btn-primario {
     background-color: #9a5fce;   
     color: #ffffff;             
+    border: 2px solid #000000;
     box-shadow: 0px 4px 6px rgba(28, 31, 199, 0.2); 
 }
 
@@ -127,4 +179,5 @@ a {
 .btn-secundario:hover {
     background-color: #9a5fce; 
     transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(28, 31, 199, 0.3);
 }
