@@ -20,7 +20,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "test:e2e": "npx playwright test"
   },
   "repository": {
     "type": "git",
@@ -35,7 +38,11 @@
   "homepage": "https://github.com/Peu81/pweb-atividade05#readme",
   "description": "",
   "devDependencies": {
+    "@jest/globals": "^30.4.1",
     "@types/jsonwebtoken": "^9.0.10",
+    "jest": "^30.4.2",
     "prisma": "^6.19.3"
   }
+
 }
+
