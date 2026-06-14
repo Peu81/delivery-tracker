@@ -30,13 +30,13 @@ export class usuariosService {
         const usuario = await this.repository.buscarPorEmail(dados.email);
 
         if (!usuario) {
-            throw new AppError("E-mail ou senha inválidos", 401);
+            throw new AppError("Credenciais inválidas!", 401);
         }
 
         const senhaValida = await bcrypt.compare(dados.senha, usuario.senha);
 
         if (!senhaValida) {
-            throw new AppError("E-mail ou senha inválidos", 401);
+            throw new AppError("Credenciais inválidas!", 401);
         }
 
         const payload = {
@@ -51,6 +51,17 @@ export class usuariosService {
             process.env.JWT_SECRET,
             {expiresIn: process.env.JWT_EXPIRES_IN}
         );
-        return { accessToken }
+    
+        const refreshToken = jwt.sign(
+            { id: usuario.id },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN }
+        );
+
+        return {
+            accessToken,
+            refreshToken,
+            usuario: payload
+        };
     }
 }
