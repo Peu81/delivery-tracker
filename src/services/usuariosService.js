@@ -8,6 +8,11 @@ export class usuariosService {
     }
 
     async criar(dados) {
+        console.log("DADOS CHEGANDO NO SERVIÇO:", dados);
+
+        if (!dados.senha || dados.senha.length < 8) {
+            throw new AppError("A senha deve ter pelo menos 8 caracteres", 400);
+        }
 
         const usuario = await this.repository.buscarPorEmail(dados.email);
 

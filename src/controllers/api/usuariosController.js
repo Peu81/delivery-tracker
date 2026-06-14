@@ -15,7 +15,7 @@ export class usuariosController {
 
             res.status(201).json(usuario);
         } catch (error) {
-            throw new AppError("Usuário já cadastrado.", 409);
+            next(error)
         }
     }
 
