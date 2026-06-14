@@ -78,7 +78,7 @@ export class entregasService {
         const entregaExiste = await this._entregaOuErro(id);
  
         if (entregaExiste.status === "ENTREGUE" || entregaExiste.status === "CANCELADA") {
-            throw new AppError("O status não pode ser alterado.", 409);
+            throw new AppError("O status não pode ser alterado.", 422);
         }
 
         if (dados.status === "CANCELADA"){
@@ -102,7 +102,11 @@ export class entregasService {
 
         const dadosAtualizados = {
             status: dados.status,
-            eventos: {create: novoEvento}
+            eventos: {create: novoEvento},
+        }
+
+        if (dados.status === "ENTREGUE") {
+            dadosAtualizados.dataEntrega = new Date().toISOString(); 
         }
 
         return this.repository.atualizar(id, dadosAtualizados);
