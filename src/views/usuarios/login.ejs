@@ -2,6 +2,7 @@
     <main>
       <div class="formulario">
           <h1 class="titulo">LOGIN</h1>
+          <div id="mensagem-erro" data-testid="alerta-erro" class="alert alert-danger" style="display: none; color: red; margin-bottom: 10px;"></div>
           <form id="form-login">
               <div class="form-group">
                 <label for="email">Email</label>
@@ -9,6 +10,7 @@
                   type="text"
                   id="email"
                   name="email"
+                  data-testid="input-email"
                   value="<%= typeof usuario !== 'undefined' && usuario.email ? usuario.email : '' %>"
                   placeholder="Email do usuário"
                   required
@@ -20,13 +22,14 @@
                       type="password"
                       id="senha"
                       name="senha"
+                      data-testid="input-senha"
                       value="<%= typeof senha !== 'undefined' && usuario.senha ? usuario.senha : '' %>"
                       placeholder="Senha"
                       required
                   >
                 </div>
                 <div class="form-acoes">
-                  <button type="submit" class="btn btn-primario">Fazer login</button>
+                  <button data-testid="btn-login" type="submit" class="btn btn-primario">Fazer login</button>
                   <a href="/painel/registrar" class="btn btn-secundario">Cadastro</a>
                 </div>
           </form>      
@@ -40,6 +43,9 @@
 
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
+    const divErro = document.getElementById('mensagem-erro');
+
+    divErro.style.display = 'none';
 
     try {
       const resposta = await axios.post('/api/auth/login', { email, senha });
@@ -47,14 +53,16 @@
       localStorage.setItem('accessToken', token);
 
       setTimeout(() => { 
-          window.location.href = '/painel'; 
+          window.location.href = '/painel/entregas'; 
       }, 1000);
       
     } catch (error) {
+      divErro.style.display = 'block';
+      
       if (error.response && error.response.status === 401) {
-        alert( "Credenciais inválidas!");
+        divErro.innerText = "Credenciais inválidas"; 
       } else {
-        alert("Erro ao tentar fazer login. Tente novamente.");
+        divErro.innerText = "Erro ao tentar fazer login. Tente novamente.";
       }
     }
   });
