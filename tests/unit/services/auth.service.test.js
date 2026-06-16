@@ -86,6 +86,17 @@ describe('AuthServices', () => {
             expect(resultado.usuario).not.toHaveProperty('senha');
         });
 
+        it('Login bem sucedido - sem o campo "senha" no objeto retornado', async () => {
+            bcrypt.compare.mockResolvedValue(true);
+            const usuarioFalso = { id: 1, email: 'pedro.teste@exemplo.com', senha: 'hash' };
+            const repo = criarRepositorioFalso({ buscarPorEmail: jest.fn().mockResolvedValue(usuarioFalso) });
+            const service = new usuariosService(repo);
+            
+            const resultado = await service.login({ email: 'pedro.teste@exemplo.com', senha: 'senhaCorreta' });
+            
+            expect(resultado.usuario).not.toHaveProperty('senhaCorreta'); 
+        });
+
     });
 
     describe('cadastro', () => {

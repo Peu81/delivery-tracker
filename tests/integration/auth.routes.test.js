@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterAll } from '@jest/globals';
 import request from 'supertest';
-import app from '../../src/server.js';
+import app from '../../src/app.js';
 import { prisma } from '../../src/config/dbInit.js';
 import jwt from 'jsonwebtoken';
 

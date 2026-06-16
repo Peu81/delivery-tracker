@@ -61,11 +61,12 @@ export class entregasService {
                 throw new AppError("Não é possível iniciar o trânsito, pois nenhum motorista foi atribuído.", 422);
                 
             };   
+        };
         
         if (!proximoStatus) {
             throw new AppError(`Não é possível avançar. Status atual: '${entrega.status}'`, 409);
             };
-        };
+        
          
         return this.atualizar(Number(id), {"status": proximoStatus});
     }
