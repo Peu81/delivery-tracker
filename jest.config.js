@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.test', override: true});
-
 export default {
   testEnvironment: 'node',
   transform: {},
@@ -17,5 +13,7 @@ export default {
     './src/middlewares/': { statements: 85 },
     './src/utils/': { statements: 75 }
   },
-  setupFilesAfterFramework: ['./tests/setup.js'],
+  setupFiles: ['./tests/env-setup.js'],
+
+  setupFilesAfterEnv: ['./tests/setup.js'],
 };

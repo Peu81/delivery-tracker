@@ -22,7 +22,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "cross-env PRISMA_IGNORE_ENV_FILE=1 DATABASE_URL=\"file:./test.db\" npx prisma db push --schema=src/prisma/schema.prisma --force-reset --skip-generate && cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:e2e": "npx playwright test"
@@ -43,6 +43,7 @@
     "@jest/globals": "^30.4.1",
     "@playwright/test": "^1.60.0",
     "@types/jsonwebtoken": "^9.0.10",
+    "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "jest": "^30.4.2",
     "prisma": "^6.19.3"
